@@ -2,38 +2,41 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.agents.base import BaseAgent
-from app.models import AgentResult
-from app.utils import compact_text
+from app.core.decision_context import DecisionContext, KnowledgeFinding
 
 
-class KnowledgeAgent(BaseAgent):
+class KnowledgeAgent:
     name = "Knowledge Agent"
-    role = "Retrieves enterprise policies, playbooks, and best practices."
 
-    def run(self, decision_input: dict[str, Any], context: dict[str, Any], storage: Any) -> AgentResult:
-        query = compact_text(decision_input)
-        documents = storage.query_knowledge(query, limit=3)
+    def __init__(self, storage: Any, limit: int = 3) -> None:
+        self.storage = storage
+        self.limit = limit
 
-        business_rules = []
-        for doc in documents:
-            if doc["source_type"] in {"policy", "playbook", "guideline"}:
-                business_rules.append(f"{doc['title']}: {doc['excerpt']}")
+    def analyze(self, context: DecisionContext) -> DecisionContext:
+        structured = self._structured(context)
+        query = f"{context.metadata.persona_id} {context.metadata.domain} {structured.retrieval_query()}"
+        docs = self.storage.query_knowledge(query, limit=self.limit)
 
-        missing_information = []
-        if not documents:
-            missing_information.append("No relevant knowledge article was found.")
+        context.retrieved_knowledge = [
+            KnowledgeFinding(
+                id=doc["id"],
+                title=doc["title"],
+                source_type=doc["source_type"],
+                domain=doc["domain"],
+                excerpt=doc["excerpt"],
+                score=float(doc.get("score", 0)),
+                constraints=self._constraints_from(doc),
+            )
+            for doc in docs
+        ]
+        return context
 
-        return AgentResult(
-            name=self.name,
-            role=self.role,
-            status="completed",
-            summary=f"Retrieved {len(documents)} relevant company knowledge sources.",
-            confidence=86 if documents else 45,
-            findings={
-                "documents_found": len(documents),
-                "business_rules": business_rules,
-            },
-            evidence=documents,
-            missing_information=missing_information,
-        )
+    def _structured(self, context: DecisionContext):
+        if context.structured_context is None:
+            raise ValueError("KnowledgeAgent requires structured_context.")
+        return context.structured_context
+
+    def _constraints_from(self, doc: dict[str, Any]) -> list[str]:
+        excerpt = doc.get("excerpt", "")
+        sentences = [item.strip() for item in excerpt.split(".") if item.strip()]
+        return sentences[:2]

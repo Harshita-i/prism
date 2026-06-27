@@ -17,7 +17,7 @@ export function Sidebar() {
           <Route className="h-5 w-5" />
         </div>
         <div>
-          <div className="text-lg font-black tracking-tight text-ink">DecisionOS</div>
+          <div className="text-lg font-black tracking-tight text-ink">Prism</div>
           <div className="text-xs font-semibold text-slate-500">Decision Intelligence</div>
         </div>
       </div>
@@ -40,3 +40,4 @@ export function Sidebar() {
     </aside>
   );
 }
+

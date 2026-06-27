@@ -1,0 +1,266 @@
+{
+  "3de3c45d36bd8daa5d327e0f8760e16f54c9c5eb3902c654b529141d07e341b8": {
+    "business_signals": [
+      {
+        "category": "Business Signal",
+        "evidence": "CFO has expressed concerns about implementation costs and expected ROI",
+        "label": "Budget Constraint",
+        "severity": "Medium"
+      },
+      {
+        "category": "Business Signal",
+        "evidence": "customer has requested a detailed value realization plan",
+        "label": "Technical Validation",
+        "severity": "Medium"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "competitor has proposed a lower-cost solution",
+        "label": "Commercial Negotiation",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "Security questionnaire pending",
+        "label": "Security Concern",
+        "severity": "Medium"
+      },
+      {
+        "category": "Metric Threshold",
+        "evidence": "days_stalled: 12",
+        "label": "Stalled Deal",
+        "severity": "Medium"
+      },
+      {
+        "category": "Opportunity Signal",
+        "evidence": "deal_value: 780000",
+        "label": "Strategic Deal",
+        "severity": "High"
+      },
+      {
+        "category": "Opportunity Signal",
+        "evidence": "business stakeholders are eager to proceed",
+        "label": "Internal Champion",
+        "severity": "Low"
+      }
+    ],
+    "confidence": 0.0,
+    "decision_type": "Stalled Deal",
+    "entities": [
+      "Nova Retail Group",
+      "Prism",
+      "Nimbus Analytics",
+      "Southeast Asia"
+    ],
+    "extracted_metrics": {
+      "days_stalled": 12,
+      "deal_value": 780000
+    },
+    "primary_problem": "The deal is stalled due to CFO concerns about costs and ROI, a pending security review, and competitive pricing pressure.",
+    "required_context": [],
+    "sentiment": "Mixed",
+    "stakeholders": [
+      "CFO",
+      "business stakeholders",
+      "Sales Manager",
+      "CIO"
+    ],
+    "summary": "Nova Retail Group is evaluating Prism for its Southeast Asia expansion, with business stakeholders eager to proceed. However, the CFO has raised concerns about implementation costs and ROI, requesting a detailed value realization plan. A competitor, Nimbus Analytics, has offered a lower-cost solution. Additionally, a security questionnaire is pending, and the deal has been stalled for 12 days, requiring the Sales Manager to strategize for executive approval while protecting deal value.",
+    "urgency": "High"
+  },
+  "75cbf87060c68c43999bb72ce37ae7d2a168ed29b4ffd6f4d7fa1499fee3dc52": {
+    "consensus": {
+      "confidence": 0.85,
+      "disagreements": [
+        "We must resist the pressure to immediately offer a pricing incentive to counter Nimbus Analytics, as discounting before resolving the security questionnaire violates policy and historically leads to lost deals."
+      ],
+      "level": "Strong",
+      "open_questions": [
+        "What is the current status of the pending security questionnaire?",
+        "What are the specific details of Nimbus Analytics' lower-cost proposal?"
+      ],
+      "preferred_strategy": "Schedule security-led technical validation workshop",
+      "rationale": [
+        "Resolving the outstanding security questionnaire (pending 9 days) is the critical path to establishing trust before addressing the CFO's budget concerns.",
+        "Historical data shows early discounting without trust leads to lost deals, whereas technical validation workshops successfully move stalled deals to procurement.",
+        "The simulation indicates an 83% win probability for the security workshop compared to only 29% for a pricing incentive."
+      ],
+      "status": "Reached"
+    },
+    "discussion": [
+      {
+        "agent": "Knowledge Specialist",
+        "confidence": 0.9,
+        "message": "According to our Enterprise Sales Playbook and Discount Policy, we must avoid discounting until value and trust are confirmed. Security and compliance objections require structured validation first.",
+        "message_type": "finding",
+        "references": [
+          "sales-security-validation",
+          "sales-enterprise-playbook",
+          "sales-discount-policy"
+        ]
+      },
+      {
+        "agent": "Memory Specialist",
+        "confidence": 0.95,
+        "message": "In the Atlas Bank case, a security-led technical validation workshop successfully moved the deal to procurement. Conversely, in the Northstar Retail case, offering an early pricing discount before resolving trust concerns resulted in a lost deal.",
+        "message_type": "support",
+        "references": [
+          "sales-atlas-security-closed",
+          "sales-northstar-discount-lost"
+        ]
+      },
+      {
+        "agent": "Risk Specialist",
+        "confidence": 0.8,
+        "message": "We face high overall risk. The CFO's budget concerns are compounded by a competitor threat from Nimbus Analytics. However, we lack specific details on their proposal and the exact status of our pending security questionnaire.",
+        "message_type": "challenge",
+        "references": [
+          "Budget Constraint",
+          "Competitor Threat",
+          "Security Concern"
+        ]
+      },
+      {
+        "agent": "Simulation Specialist",
+        "confidence": 0.9,
+        "message": "Our simulations show that scheduling a security-led technical validation workshop has an 83% win probability with low risk, whereas offering a pricing incentive drops our win probability to 29% and carries high risk.",
+        "message_type": "finding",
+        "references": [
+          "Schedule security-led technical validation workshop",
+          "Offer limited pricing incentive"
+        ]
+      }
+    ],
+    "supporting_points": [
+      "The deal is currently stalled in Executive Review with a pending security questionnaire for 9 days.",
+      "The Sales Discount Approval Policy explicitly warns against early discounting before trust and value are established.",
+      "A security-led technical validation workshop has an 83% simulated win probability."
+    ]
+  },
+  "833aff1fb90b0c1816e9595eb9276c5aaded6c0173e3893672489f6e4efe1603": {
+    "consensus": {
+      "confidence": 0,
+      "disagreements": [
+        "The 'Budget Constraint' and 'Commercial Negotiation' signals indicate pricing pressure, which the workshop doesn't directly resolve. However, resolving security and value first is paramount."
+      ],
+      "level": "Strong",
+      "open_questions": [
+        "What is the specific timeline for scheduling and completing the security workshop?",
+        "How will we address the CFO's ROI concerns in conjunction with the technical validation?"
+      ],
+      "preferred_strategy": "Schedule security-led technical validation workshop",
+      "rationale": [
+        "The security-led technical validation workshop directly addresses the pending 'Security Concern' and the customer's request for 'Technical Validation', which are critical blockers.",
+        "Historical data and internal policies strongly support resolving security and trust issues before engaging in commercial negotiations or offering discounts.",
+        "Offering a pricing incentive at this stage is high risk and has historically led to lost deals when trust and security concerns are unresolved."
+      ],
+      "status": "Reached"
+    },
+    "discussion": [
+      {
+        "agent": "Simulation Specialist",
+        "confidence": 0,
+        "message": "The 'Schedule security-led technical validation workshop' shows the highest win probability at 90% with low risk. It directly addresses the Security Concern and Technical Validation needs.",
+        "message_type": "finding",
+        "references": [
+          "Schedule security-led technical validation workshop",
+          "Security Concern",
+          "Technical Validation"
+        ]
+      },
+      {
+        "agent": "Knowledge Specialist",
+        "confidence": 0,
+        "message": "Our 'Security Validation Process' explicitly states that security and compliance objections require structured validation. Furthermore, the 'Sales Discount Approval Policy' and 'Enterprise Sales Playbook' advise against early discounting before understanding value and resolving security blockers.",
+        "message_type": "finding",
+        "references": [
+          "sales-security-validation",
+          "sales-discount-policy",
+          "sales-enterprise-playbook",
+          "Offer limited pricing incentive"
+        ]
+      },
+      {
+        "agent": "Memory Specialist",
+        "confidence": 0,
+        "message": "We have a clear precedent with 'Atlas Bank' where a security workshop resolved concerns and moved the deal to procurement. Conversely, the 'Northstar Retail' case shows that early discounting without resolving trust concerns led to a lost deal.",
+        "message_type": "finding",
+        "references": [
+          "sales-atlas-security-closed",
+          "sales-northstar-discount-lost",
+          "Security-led technical validation workshop",
+          "Early pricing discount"
+        ]
+      },
+      {
+        "agent": "Risk Specialist",
+        "confidence": 0,
+        "message": "While there's a 'Commercial Negotiation' risk due to a competitor's lower offer and 'Budget Constraint' from the CFO, the overall risk level is Medium. However, offering a pricing incentive now carries a High risk and is explicitly warned against when a 'Security Concern' is present, which it is. Prioritizing the security workshop mitigates a critical blocker first.",
+        "message_type": "challenge",
+        "references": [
+          "Commercial Negotiation",
+          "Budget Constraint",
+          "Security Concern",
+          "Offer limited pricing incentive",
+          "overall_level"
+        ]
+      }
+    ],
+    "supporting_points": [
+      "'Schedule security-led technical validation workshop' has 90% probability and Low risk.",
+      "'Security questionnaire pending' is a key blocker.",
+      "'CFO has expressed concerns about implementation costs and expected ROI' and 'customer has requested a detailed value realization plan' require validation.",
+      "'Security and compliance objections require structured validation with solutions engineering, security leads, and the account executive.'",
+      "Past recommendation 'Security-led technical validation workshop' led to outcome 'Moved to procurement'.",
+      "'Pricing incentives should be used only after business value, security, and authority blockers are understood.'",
+      "Past recommendation 'Early pricing discount' led to outcome 'Lost'. The team discounted before resolving trust concerns and lost to a competitor.",
+      "'competitor has proposed a lower-cost solution' indicates pricing pressure."
+    ]
+  },
+  "c5d5fdc6fb6f3f807149485e3df0d66178637defb81f360f6a4492116120d2a6": {
+    "business_signals": [
+      {
+        "category": "Risk Signal",
+        "evidence": "CFO has expressed concerns about implementation costs and expected ROI",
+        "label": "Budget Constraint",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "competitor has proposed a lower-cost solution",
+        "label": "Competitor Threat",
+        "severity": "Medium"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "Security questionnaire pending",
+        "label": "Security Concern",
+        "severity": "Medium"
+      }
+    ],
+    "confidence": 0.95,
+    "decision_type": "Stalled Deal",
+    "entities": [
+      "Nova Retail Group",
+      "Nimbus Analytics"
+    ],
+    "extracted_metrics": {
+      "days_stalled": "12",
+      "deal_value": "780000",
+      "pending_security_questionnaire_days": "9"
+    },
+    "primary_problem": "The deal is stalled in Executive Review due to CFO concerns over implementation costs and ROI, compounded by a pending security questionnaire and a lower-cost competitor proposal.",
+    "required_context": [
+      "Specific details of the competitor's lower-cost proposal",
+      "Current status of the pending security questionnaire"
+    ],
+    "sentiment": "Mixed",
+    "stakeholders": [
+      "CFO",
+      "CIO",
+      "Sales Manager"
+    ],
+    "summary": "Nova Retail Group's $780,000 enterprise deal is stalled in the Executive Review stage. While business stakeholders support the expansion, the CFO has raised concerns regarding implementation costs and ROI, requesting a value realization plan. The deal faces further risks from a lower-cost proposal by competitor Nimbus Analytics and an outstanding security questionnaire pending for 9 days.",
+    "urgency": "High"
+  }
+}

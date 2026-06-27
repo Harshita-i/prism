@@ -4,6 +4,8 @@ export type CreateDecisionRequest = {
   title: string;
   customer_name: string;
   domain: string;
+  persona_id: string;
+  decision_type: string;
   interaction_text: string;
   crm_record: Record<string, unknown>;
   support_history: Array<Record<string, unknown>>;
@@ -30,6 +32,27 @@ export type Recommendation = {
   evidence: string[];
 };
 
+export type CouncilMessage = {
+  turn: number;
+  agent: string;
+  role: string;
+  message_type: string;
+  message: string;
+  references: string[];
+  confidence?: number | null;
+  created_at: string;
+};
+
+export type CouncilConsensus = {
+  recommended_action: string;
+  consensus_level: string;
+  confidence: number;
+  rationale: string[];
+  conflicts_resolved: string[];
+  rejected_alternatives: Array<Record<string, unknown>>;
+  open_questions: string[];
+};
+
 export type DecisionCard = {
   decision_id: string;
   title: string;
@@ -53,6 +76,9 @@ export type DecisionCard = {
     reviewed_at?: string;
   };
   created_at: string;
+  council_discussion?: CouncilMessage[];
+  consensus?: CouncilConsensus;
+  decision_matrix?: Array<Record<string, unknown>>;
 };
 
 export type Decision = {
@@ -68,3 +94,4 @@ export type Decision = {
   review: Record<string, unknown> | null;
   outcome: Record<string, unknown> | null;
 };
+

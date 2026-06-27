@@ -67,40 +67,35 @@ class SQLiteStorage:
 
     def seed_if_empty(self) -> None:
         with self.connect() as connection:
-            knowledge_count = connection.execute("SELECT COUNT(*) FROM knowledge_docs").fetchone()[0]
-            memory_count = connection.execute("SELECT COUNT(*) FROM memory_cases").fetchone()[0]
+            connection.executemany(
+                """
+                INSERT OR REPLACE INTO knowledge_docs
+                (id, title, source_type, domain, tags_json, content)
+                VALUES (:id, :title, :source_type, :domain, :tags_json, :content)
+                """,
+                [
+                    {
+                        **doc,
+                        "tags_json": json.dumps(doc["tags"]),
+                    }
+                    for doc in DEFAULT_KNOWLEDGE_DOCS
+                ],
+            )
 
-            if knowledge_count == 0:
-                connection.executemany(
-                    """
-                    INSERT INTO knowledge_docs
-                    (id, title, source_type, domain, tags_json, content)
-                    VALUES (:id, :title, :source_type, :domain, :tags_json, :content)
-                    """,
-                    [
-                        {
-                            **doc,
-                            "tags_json": json.dumps(doc["tags"]),
-                        }
-                        for doc in DEFAULT_KNOWLEDGE_DOCS
-                    ],
-                )
-
-            if memory_count == 0:
-                connection.executemany(
-                    """
-                    INSERT INTO memory_cases
-                    (id, customer_name, industry, segment, problem, recommendation, outcome, confidence, tags_json, summary)
-                    VALUES (:id, :customer_name, :industry, :segment, :problem, :recommendation, :outcome, :confidence, :tags_json, :summary)
-                    """,
-                    [
-                        {
-                            **case,
-                            "tags_json": json.dumps(case["tags"]),
-                        }
-                        for case in DEFAULT_MEMORY_CASES
-                    ],
-                )
+            connection.executemany(
+                """
+                INSERT OR REPLACE INTO memory_cases
+                (id, customer_name, industry, segment, problem, recommendation, outcome, confidence, tags_json, summary)
+                VALUES (:id, :customer_name, :industry, :segment, :problem, :recommendation, :outcome, :confidence, :tags_json, :summary)
+                """,
+                [
+                    {
+                        **case,
+                        "tags_json": json.dumps(case["tags"]),
+                    }
+                    for case in DEFAULT_MEMORY_CASES
+                ],
+            )
 
     def create_decision(self, payload: dict[str, Any]) -> dict[str, Any]:
         decision_id = str(uuid.uuid4())
@@ -110,8 +105,8 @@ class SQLiteStorage:
             "created_at": now,
             "updated_at": now,
             "title": payload["title"],
-            "customer_name": payload.get("customer_name") or payload.get("crm_record", {}).get("customer_name", "Unknown Customer"),
-            "domain": payload.get("domain", "B2B SaaS Customer Success"),
+            "customer_name": payload.get("customer_name") or payload.get("crm_record", {}).get("customer_name", "Unknown Entity"),
+            "domain": payload.get("domain", "Business Operations"),
             "lifecycle_stage": "Draft",
             "input_json": json.dumps(payload),
             "card_json": None,
@@ -203,7 +198,7 @@ class SQLiteStorage:
 
         return sorted(scored, key=lambda item: item["score"], reverse=True)[:limit]
 
-    def query_memory(self, query: str, limit: int = 3) -> list[dict[str, Any]]:
+    def query_memory(self, query: str, limit: int = 4) -> list[dict[str, Any]]:
         with self.connect() as connection:
             rows = connection.execute("SELECT * FROM memory_cases").fetchall()
 
@@ -282,3 +277,4 @@ class SQLiteStorage:
             "review": json.loads(row["review_json"]) if row["review_json"] else None,
             "outcome": json.loads(row["outcome_json"]) if row["outcome_json"] else None,
         }
+

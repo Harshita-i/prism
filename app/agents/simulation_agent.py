@@ -1,104 +1,119 @@
 from __future__ import annotations
 
-from typing import Any
-
-from app.agents.base import BaseAgent
-from app.models import ActionOption, AgentResult
-from app.utils import clamp, compact_text, contains_any
+from app.core.decision_context import DecisionContext, SimulationStrategy
+from app.utils import clamp
 
 
-class SimulationAgent(BaseAgent):
+class SimulationAgent:
     name = "Simulation Agent"
-    role = "Compares possible actions before the platform recommends one."
 
-    def run(self, decision_input: dict[str, Any], context: dict[str, Any], storage: Any) -> AgentResult:
-        text = compact_text(decision_input)
-        risk = context.get("risk")
-        risk_score = 50
-        if risk:
-            risk_score = risk.findings.get("risk_score", 50)
+    RISK_ADJUSTMENT = {
+        "Low": 4,
+        "Medium": -2,
+        "High": -8,
+        "Critical": -16,
+    }
 
-        memory = context.get("memory")
-        similar_cases = memory.evidence if memory else []
+    def analyze(self, context: DecisionContext) -> DecisionContext:
+        structured = self._structured(context)
+        signals = {signal.label.lower() for signal in structured.business_signals}
+        memory_actions = {case.recommendation.lower(): case for case in context.historical_memory}
+        strategies = []
 
-        workshop_success = sum(
-            1 for case in similar_cases
-            if "workshop" in case["recommendation"].lower()
-            and case["outcome"].lower() in {"renewed", "expanded"}
-        )
+        for action in context.persona.get("actions", []):
+            probability = int(action.get("base_success", 55))
+            matched_drivers = self._matched_drivers(action, signals)
+            avoided_conflicts = self._matched_avoidance(action, signals)
 
-        discount_success = sum(
-            1 for case in similar_cases
-            if "discount" in case["recommendation"].lower()
-            and case["outcome"].lower() in {"renewed", "expanded"}
-        )
+            probability += len(matched_drivers) * 7
+            probability -= len(avoided_conflicts) * 10
+            probability += self._knowledge_alignment(action, context)
+            probability += self._memory_alignment(action, memory_actions)
 
-        pricing_signal = contains_any(text, ["pricing", "expensive", "budget", "discount"])
-        competitor_signal = contains_any(text, ["competitor", "alternative", "evaluating"])
-        support_signal = contains_any(text, ["support", "ticket", "bug", "sla"])
+            if context.risk_analysis:
+                probability += self.RISK_ADJUSTMENT.get(action.get("risk_level", "Medium"), -2)
+                if context.risk_analysis.overall_level in {"High", "Critical"} and action.get("risk_level") == "High":
+                    probability -= 8
 
-        options = [
-            ActionOption(
-                action="Schedule executive value workshop",
-                success_probability=clamp(
-                    68 + workshop_success * 7 + (8 if pricing_signal else 0) + (7 if competitor_signal else 0),
-                    maximum=92,
-                ),
-                revenue_impact="High retention, low margin loss",
-                risk_level="Low",
-                reasoning="Addresses pricing by proving value before changing commercial terms.",
-                required_owner="Customer Success Manager + Account Executive",
-                evidence=[
-                    "Pricing policy prefers value alignment before discounts.",
-                    "Similar successful cases used executive workshops.",
-                ],
-            ),
-            ActionOption(
-                action="Offer targeted renewal discount",
-                success_probability=clamp(
-                    56 + discount_success * 6 + (8 if pricing_signal else 0) - (8 if risk_score > 75 else 0),
-                    maximum=84,
-                ),
-                revenue_impact="Medium retention, direct margin loss",
-                risk_level="Medium",
-                reasoning="May reduce buying friction, but can train the customer to negotiate before value is confirmed.",
-                required_owner="Account Executive + Finance Approval",
-                evidence=[
-                    "Discounts above policy threshold require approval.",
-                    "Discount works best when budget reduction is confirmed.",
-                ],
-            ),
-            ActionOption(
-                action="Launch technical success recovery plan",
-                success_probability=clamp(
-                    57 + (18 if support_signal else 0) + (8 if risk_score >= 70 else 0),
-                    maximum=86,
-                ),
-                revenue_impact="Medium retention, operational cost",
-                risk_level="Medium",
-                reasoning="Useful when technical blockers or support issues are the main cause of renewal risk.",
-                required_owner="Solutions Engineer + Support Lead",
-                evidence=[
-                    "Support escalation guidelines require a named owner and customer-visible recovery plan.",
-                ],
-            ),
-        ]
+            max_success = int(action.get("max_success", 90))
+            probability = clamp(probability, 25, max_success)
+            reason = self._reason(action, matched_drivers, avoided_conflicts, context)
 
-        sorted_options = sorted(options, key=lambda option: option.success_probability, reverse=True)
+            strategies.append(
+                SimulationStrategy(
+                    title=action["action"],
+                    description=action.get("reasoning", action["action"]),
+                    probability=probability,
+                    risk=action.get("risk_level", "Medium"),
+                    expected_outcome=action.get("impact", "Business impact to be reviewed"),
+                    reason=reason,
+                    owner=action.get("owner", "Business Owner"),
+                    evidence=action.get("evidence", []),
+                )
+            )
 
-        return AgentResult(
-            name=self.name,
-            role=self.role,
-            status="completed",
-            summary=f"Simulated {len(sorted_options)} next best actions.",
-            confidence=86,
-            findings={
-                "options": [option.to_dict() for option in sorted_options],
-                "best_action": sorted_options[0].action,
-            },
-            evidence=[
-                {"source": "Simulation", "detail": option.to_dict()}
-                for option in sorted_options
-            ],
-            missing_information=[],
-        )
+        context.simulations = sorted(strategies, key=lambda item: item.probability, reverse=True)
+        return context
+
+    def _structured(self, context: DecisionContext):
+        if context.structured_context is None:
+            raise ValueError("SimulationAgent requires structured_context.")
+        return context.structured_context
+
+    def _matched_drivers(self, action: dict, signals: set[str]) -> list[str]:
+        matches = []
+        for driver in action.get("decision_drivers", []):
+            driver_terms = {term for term in driver.lower().replace("-", " ").split() if len(term) > 2}
+            if driver.lower() in signals or any(driver.lower() in signal for signal in signals):
+                matches.append(driver)
+            elif driver_terms and any(driver_terms.issubset(set(signal.split())) for signal in signals):
+                matches.append(driver)
+        return matches
+
+    def _matched_avoidance(self, action: dict, signals: set[str]) -> list[str]:
+        conflicts = []
+        for avoid in action.get("avoid_when", []):
+            avoid_terms = {term for term in avoid.lower().replace("-", " ").split() if len(term) > 2}
+            if avoid.lower() in signals or any(avoid.lower() in signal for signal in signals):
+                conflicts.append(avoid)
+            elif avoid_terms and any(avoid_terms.issubset(set(signal.split())) for signal in signals):
+                conflicts.append(avoid)
+        return conflicts
+
+    def _knowledge_alignment(self, action: dict, context: DecisionContext) -> int:
+        evidence_text = " ".join(item.title + " " + item.excerpt for item in context.retrieved_knowledge).lower()
+        points = 0
+        for driver in action.get("decision_drivers", []):
+            if driver.lower() in evidence_text:
+                points += 3
+        return min(points, 9)
+
+    def _memory_alignment(self, action: dict, memory_actions: dict) -> int:
+        action_name = action["action"].lower()
+        points = 0
+        for previous_action, case in memory_actions.items():
+            if previous_action in action_name or action_name in previous_action:
+                outcome = case.outcome.lower()
+                if any(term in outcome for term in ["renew", "stayed", "improved", "protected", "procurement", "closed"]):
+                    points += 8
+                elif any(term in outcome for term in ["churn", "resigned", "lost", "breach"]):
+                    points -= 8
+        return points
+
+    def _reason(
+        self,
+        action: dict,
+        matched_drivers: list[str],
+        avoided_conflicts: list[str],
+        context: DecisionContext,
+    ) -> str:
+        parts = [action.get("reasoning", "Strategy aligns with the configured persona playbook.")]
+        if matched_drivers:
+            parts.append(f"Matches structured signal(s): {', '.join(matched_drivers[:3])}.")
+        if avoided_conflicts:
+            parts.append(f"Risk warning: also matches avoid condition(s): {', '.join(avoided_conflicts[:2])}.")
+        if context.retrieved_knowledge:
+            parts.append(f"Grounded by {len(context.retrieved_knowledge)} retrieved knowledge source(s).")
+        if context.historical_memory:
+            parts.append(f"Compared with {len(context.historical_memory)} historical memory case(s).")
+        return " ".join(parts)

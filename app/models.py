@@ -5,6 +5,20 @@ from datetime import datetime, timezone
 from typing import Any
 
 
+LIFECYCLE_STAGES = [
+    "Draft",
+    "Evidence Collection",
+    "Decision Council Discussion",
+    "Simulation",
+    "Recommendation",
+    "Human Review",
+    "Approved",
+    "Executed",
+    "Outcome Recorded",
+    "Learning",
+]
+
+
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 

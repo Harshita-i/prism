@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+import os
 from pathlib import Path
 from typing import Any
 
@@ -11,15 +13,17 @@ from app.orchestrator import DecisionOrchestrator
 from app.storage import SQLiteStorage
 
 
+logging.basicConfig(level=os.getenv("PRISM_LOG_LEVEL", "INFO"))
+
 ROOT = Path(__file__).resolve().parents[1]
 storage = SQLiteStorage(ROOT / "decisionos.db")
 storage.seed_if_empty()
 orchestrator = DecisionOrchestrator(storage)
 
 app = FastAPI(
-    title="DecisionOS Day 1 API",
-    description="Agentic decision intelligence backend for B2B SaaS next best action recommendations.",
-    version="0.1.0",
+    title="Prism API",
+    description="Collaborative DecisionContext backend for enterprise decision intelligence.",
+    version="0.4.0",
 )
 
 app.add_middleware(
@@ -35,9 +39,11 @@ app.add_middleware(
 
 
 class CreateDecisionRequest(BaseModel):
-    title: str = Field(..., examples=["Renewal risk for enterprise customer"])
-    customer_name: str = Field(..., examples=["Nimbus Cloud"])
-    domain: str = "B2B SaaS Customer Success"
+    title: str = Field(..., examples=["Senior engineer retention risk"])
+    customer_name: str = Field(..., examples=["Harshita"])
+    domain: str = "People Operations"
+    persona_id: str = "hr"
+    decision_type: str = "Retention Risk"
     interaction_text: str
     crm_record: dict[str, Any] = Field(default_factory=dict)
     support_history: list[dict[str, Any]] = Field(default_factory=list)
@@ -45,13 +51,13 @@ class CreateDecisionRequest(BaseModel):
 
 class ReviewRequest(BaseModel):
     action: str = Field(..., examples=["approve"])
-    reviewer: str = Field(..., examples=["Customer Success Manager"])
+    reviewer: str = Field(..., examples=["Business Decision Owner"])
     notes: str = ""
     modified_action: str | None = None
 
 
 class OutcomeRequest(BaseModel):
-    outcome: str = Field(..., examples=["Renewed"])
+    outcome: str = Field(..., examples=["Stayed"])
     notes: str = ""
 
 

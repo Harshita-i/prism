@@ -2,78 +2,126 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.agents.base import BaseAgent
-from app.models import AgentResult
-from app.utils import clamp, compact_text, contains_any
+from app.core.decision_context import DecisionContext, RiskAnalysis, RiskFinding
+from app.utils import clamp
 
 
-class RiskAgent(BaseAgent):
+class RiskAgent:
     name = "Risk Agent"
-    role = "Identifies churn, revenue, support, and confidence risks."
 
-    def run(self, decision_input: dict[str, Any], context: dict[str, Any], storage: Any) -> AgentResult:
-        crm = decision_input.get("crm_record") or {}
-        support_history = decision_input.get("support_history") or []
-        text = compact_text(decision_input)
+    URGENCY_SCORE = {
+        "Low": 8,
+        "Medium": 18,
+        "High": 30,
+        "Critical": 44,
+    }
 
-        risk_score = 25
-        risk_factors = []
-        opportunity_signals = []
+    SEVERITY_SCORE = {
+        "Low": 5,
+        "Medium": 10,
+        "High": 18,
+        "Critical": 28,
+    }
 
-        if contains_any(text, ["pricing", "expensive", "budget", "discount"]):
-            risk_score += 18
-            risk_factors.append("Pricing objection detected.")
-        if contains_any(text, ["competitor", "alternative", "evaluating"]):
-            risk_score += 22
-            risk_factors.append("Customer is evaluating competitors.")
-        if contains_any(text, ["renewal", "contract"]):
-            risk_score += 10
-            risk_factors.append("Decision is close to renewal.")
-        if support_history:
-            risk_score += min(16, len(support_history) * 4)
-            risk_factors.append(f"{len(support_history)} support item(s) may affect renewal confidence.")
+    def analyze(self, context: DecisionContext) -> DecisionContext:
+        structured = self._structured(context)
+        score = self.URGENCY_SCORE.get(structured.urgency, 18)
+        score += 10 if structured.sentiment == "Negative" else 6 if structured.sentiment == "Mixed" else 0
+        score += min(24, sum(self.SEVERITY_SCORE.get(signal.severity, 10) for signal in structured.business_signals))
+        score += min(12, len(structured.required_context) * 3)
+        score = clamp(score, 0, 100)
 
-        health_score = crm.get("health_score")
-        if isinstance(health_score, (int, float)):
-            if health_score < 60:
-                risk_score += 18
-                risk_factors.append("Customer health score is below 60.")
-            elif health_score >= 75:
-                risk_score -= 8
-                opportunity_signals.append("Health score indicates enough adoption to defend value.")
+        overall_level = self._risk_level(score)
+        business_risks = [
+            RiskFinding(
+                label=signal.label,
+                level=signal.severity,
+                rationale=f"{signal.label} affects {context.metadata.persona_label} decision quality.",
+                evidence=signal.evidence,
+            )
+            for signal in structured.business_signals
+        ]
 
-        usage = crm.get("usage_trend")
-        if usage == "up":
-            risk_score -= 8
-            opportunity_signals.append("Usage trend is increasing.")
-        elif usage == "down":
-            risk_score += 12
-            risk_factors.append("Usage trend is decreasing.")
+        operational_risks = self._operational_risks(context)
+        financial_risks = self._financial_risks(context)
+        execution_risks = self._execution_risks(context)
+        confidence_risks = [
+            RiskFinding(
+                label=missing,
+                level="Medium",
+                rationale="Missing information may lower confidence during human review.",
+            )
+            for missing in structured.required_context
+        ]
 
-        risk_score = clamp(int(risk_score), 0, 100)
-        risk_level = "High" if risk_score >= 70 else "Medium" if risk_score >= 40 else "Low"
-
-        missing_information = []
-        if "contract_value" not in crm:
-            missing_information.append("Contract value is missing, so revenue impact is uncertain.")
-        if "executive_sponsor" not in crm:
-            missing_information.append("Executive sponsor is unknown.")
-
-        return AgentResult(
-            name=self.name,
-            role=self.role,
-            status="completed",
-            summary=f"{risk_level} risk detected with score {risk_score}/100.",
-            confidence=84 if risk_factors else 72,
-            findings={
-                "risk_score": risk_score,
-                "risk_level": risk_level,
-                "risk_factors": risk_factors,
-                "opportunity_signals": opportunity_signals,
-            },
-            evidence=[
-                {"source": "CRM health score", "detail": health_score},
-                {"source": "Support history count", "detail": len(support_history)},
-            ],
-            missing_information=missing_information,
+        context.risk_analysis = RiskAnalysis(
+            overall_level=overall_level,
+            score=score,
+            business_risks=business_risks,
+            financial_risks=financial_risks,
+            operational_risks=operational_risks,
+            execution_risks=execution_risks,
+            confidence_risks=confidence_risks,
+            missing_information=structured.required_context,
         )
+        return context
+
+    def _structured(self, context: DecisionContext):
+        if context.structured_context is None:
+            raise ValueError("RiskAgent requires structured_context.")
+        return context.structured_context
+
+    def _risk_level(self, score: int) -> str:
+        if score >= 86:
+            return "Critical"
+        if score >= 62:
+            return "High"
+        if score >= 36:
+            return "Medium"
+        return "Low"
+
+    def _operational_risks(self, context: DecisionContext) -> list[RiskFinding]:
+        risks = []
+        if not context.retrieved_knowledge:
+            risks.append(
+                RiskFinding(
+                    label="Limited policy grounding",
+                    level="Medium",
+                    rationale="No knowledge source was retrieved for this decision.",
+                )
+            )
+        return risks
+
+    def _financial_risks(self, context: DecisionContext) -> list[RiskFinding]:
+        risks = []
+        actions = context.persona.get("actions", [])
+        high_cost_actions = [action for action in actions if "cost" in str(action.get("impact", "")).lower() or "margin loss" in str(action.get("impact", "")).lower()]
+        if high_cost_actions:
+            risks.append(
+                RiskFinding(
+                    label="Commercial impact possible",
+                    level="Medium",
+                    rationale="Some available actions may create direct cost, revenue, margin, or capacity impact.",
+                    evidence=", ".join(action["action"] for action in high_cost_actions[:2]),
+                )
+            )
+        return risks
+
+    def _execution_risks(self, context: DecisionContext) -> list[RiskFinding]:
+        risks = []
+        if context.historical_memory:
+            failed = [case for case in context.historical_memory if self._negative_outcome(case.outcome)]
+            if failed:
+                risks.append(
+                    RiskFinding(
+                        label="Historical failure pattern",
+                        level="High" if len(failed) > 1 else "Medium",
+                        rationale=f"{len(failed)} similar historical case(s) had weak outcomes.",
+                        evidence=", ".join(case.outcome for case in failed[:3]),
+                    )
+                )
+        return risks
+
+    def _negative_outcome(self, outcome: str) -> bool:
+        normalized = outcome.lower()
+        return any(term in normalized for term in ["churn", "resign", "lost", "breach", "failed", "escalated"])
