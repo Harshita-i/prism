@@ -1,79 +1,57 @@
-# DecisionOS Day 2 Frontend
+# Prism Workspace UI
 
-This is the Day 2 frontend implementation for the DecisionOS hackathon prototype.
+Frontend-only navigation and information architecture upgrade.
 
-It connects to the Day 1 FastAPI backend and turns the backend Decision Card into a polished enterprise dashboard.
+This keeps the existing backend APIs and business logic intact.
 
-## What This Implements
+## What Changed
 
-- DecisionOS dashboard
-- Create and run demo Decision
-- Planner execution view
-- Decision lifecycle timeline
-- Decision Council agent cards
-- Recommendation card
-- Simulation alternatives
-- Evidence and memory panels
-- Human review actions
-- Outcome learning action
+- Workspace sidebar with separate routes
+- Dashboard overview page
+- Decisions list page
+- Decision details page with tabs
+- Executive Council workspace
+- Evidence workspace
+- Analysis workspace
+- Outcomes workspace
+- Analytics workspace
+- Integrations and Settings pages
 
-## Required Backend
-
-Run your backend first from `C:\xl_venture`:
+## Copy Into Your Frontend
 
 ```powershell
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+cd C:\xl_venture\frontend
+Remove-Item .\app, .\components, .\lib, .\types -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item .\next.config.ts -Force -ErrorAction SilentlyContinue
+
+cd C:\xl_venture
+Copy-Item "C:\Users\immad\Documents\Codex\2026-06-26\introduction-every-interaction-inside-decisionos-is\outputs\prism-workspace-ui\*" ".\frontend\" -Recurse -Force
 ```
 
-Backend URL:
-
-```text
-http://127.0.0.1:8000
-```
-
-## Frontend Setup
-
-From `C:\xl_venture`:
+If npm packages are already installed, run:
 
 ```powershell
-npx create-next-app@latest frontend --ts --tailwind --eslint --app
-```
-
-Then copy the files from this folder into `C:\xl_venture\frontend`.
-
-Install required frontend package:
-
-```powershell
-cd frontend
-npm install lucide-react
-```
-
-Create `.env.local`:
-
-```text
-NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
-```
-
-Run:
-
-```powershell
+cd C:\xl_venture\frontend
 npm run dev
+```
+
+If packages are missing, run:
+
+```powershell
+cd C:\xl_venture\frontend
+npm install --legacy-peer-deps
+npm run dev
+```
+
+Backend should still run separately:
+
+```powershell
+cd C:\xl_venture
+uvicorn app.main:app --reload --port 8000
 ```
 
 Open:
 
 ```text
-http://localhost:3000
+http://localhost:3000/dashboard
 ```
-
-## Demo Flow
-
-1. Click `Run Decision Council`
-2. Show Planner selected agents
-3. Show Decision Council outputs
-4. Show recommendation: `Schedule executive value workshop`
-5. Click `Approve`
-6. Click `Record Renewed Outcome`
-7. Explain that the completed Decision becomes memory
-
