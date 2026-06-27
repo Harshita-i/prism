@@ -2,261 +2,248 @@ from __future__ import annotations
 
 from typing import Protocol
 
-from app.core.decision_context import Consensus, DecisionContext, SimulationStrategy
+from app.core.consensus_engine import ConsensusEngine
+from app.core.decision_context import DecisionContext
 from app.llm.service import LLMService
 
 
 class CouncilGenerator(Protocol):
     def discuss(self, context: DecisionContext) -> DecisionContext:
-        """Generate council messages and consensus from completed specialist work."""
+        """Generate collaborative council messages and consensus."""
 
 
 class ExecutiveCouncil:
     """
-    Dynamic council layer.
+    Collaborative executive council.
 
-    Phase 2 tries Gemini or another provider through LLMService. If that layer
-    is disabled or fails, this class falls back to the local structured council.
+    The council behaves like a moderated meeting. Specialists respond to prior
+    messages, challenge assumptions, update confidence, and then ConsensusEngine
+    computes agreement strength.
     """
 
-    def __init__(self, llm_service: LLMService | None = None) -> None:
+    def __init__(
+        self,
+        llm_service: LLMService | None = None,
+        consensus_engine: ConsensusEngine | None = None,
+    ) -> None:
         self.llm_service = llm_service or LLMService.from_env()
+        self.consensus_engine = consensus_engine or ConsensusEngine()
 
     def discuss(self, context: DecisionContext) -> DecisionContext:
         context.council_messages.clear()
+        context.council_timeline.clear()
+        context.planner_actions.clear()
+
         llm_result = self.llm_service.facilitate_council(context)
         context.llm_metadata["executive_council"] = llm_result.metadata
         if llm_result.value is not None:
             context.council_messages = llm_result.value["messages"]
-            context.consensus = llm_result.value["consensus"]
+            context.council_timeline = list(context.council_messages)
+            context.consensus = self.consensus_engine.evaluate(context)
+            self._append_consensus_message(context)
             return context
 
         context.add_message(
             agent="Planner",
             message_type="clarification",
-            message="AI reasoning temporarily unavailable. Showing rule-based reasoning.",
+            message="AI reasoning temporarily unavailable. Running collaborative local council.",
             references=[],
             confidence=70,
+            confidence_before=70,
+            confidence_after=70,
         )
+        context.planner_actions.append("Opened fallback collaborative council because LLM council was unavailable.")
 
-        self._knowledge_turn(context)
-        self._memory_turn(context)
-        self._risk_turn(context)
-        self._simulation_turn(context)
-        self._challenge_turn(context)
-        self._consensus_turn(context)
+        self._knowledge_opens(context)
+        self._risk_challenges(context)
+        self._memory_responds(context)
+        self._scenario_revises(context)
+        self._planner_moderates(context)
+        context.consensus = self.consensus_engine.evaluate(context)
+        self._append_consensus_message(context)
         return context
 
-    def _knowledge_turn(self, context: DecisionContext) -> None:
-        if not context.retrieved_knowledge:
+    def _knowledge_opens(self, context: DecisionContext) -> None:
+        if not context.knowledge_packets:
+            context.open_questions.append("Confirm which policy or playbook governs this decision.")
             context.add_message(
                 agent="Knowledge Agent",
                 message_type="question",
-                message="No policy evidence was retrieved, so the council needs human confirmation before treating any action as policy-aligned.",
-                references=[],
-                confidence=58,
+                message="I do not have a Knowledge Packet strong enough to ground the decision. Which policy should govern this?",
+                confidence=52,
+                confidence_before=60,
+                confidence_after=52,
             )
-            context.open_questions.append("Confirm which policy or playbook governs this decision.")
             return
 
-        top = context.retrieved_knowledge[0]
-        constraints = ", ".join(top.constraints[:2]) if top.constraints else top.excerpt
+        top = context.knowledge_packets[0]
+        confidence = round(top.confidence * 100)
         context.add_message(
             agent="Knowledge Agent",
-            message_type="finding",
-            message=f"{top.title} is the strongest knowledge source. It points the council toward: {constraints}",
-            references=[top.id],
-            confidence=round(min(96, 70 + top.score * 20)),
-        )
-
-    def _memory_turn(self, context: DecisionContext) -> None:
-        if not context.historical_memory:
-            context.add_message(
-                agent="Memory Agent",
-                message_type="clarification",
-                message="No close historical case was found, so the council should rely more heavily on policy and simulation evidence.",
-                references=[],
-                confidence=60,
-            )
-            return
-
-        successful = [case for case in context.historical_memory if self._positive_outcome(case.outcome)]
-        failed = [case for case in context.historical_memory if not self._positive_outcome(case.outcome)]
-        strongest = context.historical_memory[0]
-        context.add_message(
-            agent="Memory Agent",
-            message_type="support" if successful else "challenge",
+            message_type="evidence",
             message=(
-                f"Historical memory found {len(context.historical_memory)} similar case(s): "
-                f"{len(successful)} successful and {len(failed)} risky. The closest lesson is: "
-                f"{strongest.lesson or strongest.summary}"
+                f"I am grounding the council in {top.title}. Finding: {top.finding} "
+                f"This supports {', '.join(top.supports[:3]) or 'the leading decision path'}."
             ),
-            references=[case.id for case in context.historical_memory[:3]],
-            confidence=round(min(94, 66 + strongest.relevance * 22)),
+            references=[top.id],
+            evidence_references=[top.id, *top.chunk_ids[:2]],
+            supports=top.supports[:3],
+            confidence=confidence,
+            confidence_before=max(40, confidence - 8),
+            confidence_after=confidence,
         )
 
-    def _risk_turn(self, context: DecisionContext) -> None:
+    def _risk_challenges(self, context: DecisionContext) -> None:
         risk = context.risk_analysis
+        winning = context.winning_scenario
         if risk is None:
+            context.open_questions.append("Risk analysis is missing.")
             context.add_message(
                 agent="Risk Agent",
                 message_type="question",
-                message="Risk analysis is missing, so the council cannot safely move to a final decision.",
-                references=[],
+                message="I cannot validate council safety because risk analysis is missing.",
                 confidence=50,
+                confidence_before=60,
+                confidence_after=50,
             )
-            context.open_questions.append("Run risk analysis before final recommendation.")
             return
 
-        risk_count = sum(
-            len(group)
-            for group in [
-                risk.business_risks,
-                risk.financial_risks,
-                risk.operational_risks,
-                risk.execution_risks,
-                risk.confidence_risks,
-            ]
-        )
-        message_type = "challenge" if risk.overall_level in {"High", "Critical"} else "support"
+        challenge_refs = [finding.label for finding in self._all_risks(context)[:4]]
+        if winning and risk.overall_level in {"High", "Critical"} and winning.business_risk in {"Low", "Medium"}:
+            message = (
+                f"I challenge the council to explain why overall risk is {risk.overall_level} while the leading scenario "
+                f"({winning.title}) has {winning.business_risk} scenario risk. The recommendation must show mitigation."
+            )
+        else:
+            message = (
+                f"Risk is {risk.overall_level} with score {risk.score}/100. I am watching execution and confidence risk, "
+                "but I do not see a blocker if mitigation is explicit."
+            )
+        confidence = max(55, min(92, 100 - risk.score + 35))
         context.add_message(
             agent="Risk Agent",
-            message_type=message_type,
-            message=(
-                f"Overall risk is {risk.overall_level} at {risk.score}/100 with {risk_count} risk signal(s). "
-                f"The council should avoid strategies that increase execution risk without resolving the main business signals."
-            ),
-            references=[finding.label for finding in self._all_risks(context)[:4]],
-            confidence=84,
+            message_type="challenge" if risk.overall_level in {"High", "Critical"} else "clarification",
+            message=message,
+            references=challenge_refs,
+            challenges=[winning.id] if winning else [],
+            confidence=confidence,
+            confidence_before=max(40, confidence - 10),
+            confidence_after=confidence,
         )
 
-        for question in risk.missing_information:
-            if question not in context.open_questions:
-                context.open_questions.append(question)
+    def _memory_responds(self, context: DecisionContext) -> None:
+        if not context.memory_packets:
+            context.add_message(
+                agent="Memory Agent",
+                message_type="clarification",
+                message="I do not have close organizational memory, so I will not overstate historical support.",
+                confidence=58,
+                confidence_before=65,
+                confidence_after=58,
+                reply_to=2 if len(context.council_messages) >= 2 else None,
+            )
+            return
 
-    def _simulation_turn(self, context: DecisionContext) -> None:
-        if not context.simulations:
+        top = context.memory_packets[0]
+        failure_note = f" I also see a failure caution: {context.failure_patterns[0].summary}" if context.failure_patterns else ""
+        confidence = round(top.confidence * 100)
+        context.add_message(
+            agent="Memory Agent",
+            message_type="support",
+            message=(
+                f"I respond to Risk with historical experience: {top.title} had outcome '{top.outcome}'. "
+                f"Lesson: {top.reason}.{failure_note}"
+            ),
+            references=[top.id, top.source_decision],
+            evidence_references=[top.id, top.source_decision],
+            supports=[context.winning_scenario.id] if context.winning_scenario else [],
+            challenges=[context.rejected_scenarios[0].id] if context.rejected_scenarios else [],
+            confidence=confidence,
+            confidence_before=max(40, confidence - 9),
+            confidence_after=confidence,
+            reply_to=2 if len(context.council_messages) >= 2 else None,
+        )
+
+    def _scenario_revises(self, context: DecisionContext) -> None:
+        winning = context.winning_scenario
+        if winning is None:
+            context.open_questions.append("Scenario ranking is missing.")
             context.add_message(
                 agent="Simulation Agent",
                 message_type="question",
-                message="No strategy simulation exists, so the council cannot compare action paths.",
-                references=[],
-                confidence=55,
+                message="I need Scenario Packets before I can compare future outcomes.",
+                confidence=50,
+                confidence_before=60,
+                confidence_after=50,
             )
-            context.open_questions.append("Generate strategy simulations before decision core synthesis.")
             return
 
-        top = self._top_strategy(context.simulations)
-        runner_up = [item for item in context.simulations if item.title != top.title]
-        comparison = ""
-        if runner_up:
-            second = self._top_strategy(runner_up)
-            comparison = f" It outperforms {second.title} by {top.probability - second.probability} point(s)."
+        rejected = context.rejected_scenarios[0] if context.rejected_scenarios else None
+        confidence = round(winning.confidence * 100)
+        revision = (
+            f"I updated the projection around {winning.title}: success {round(winning.success_probability * 100)}%, "
+            f"cost {winning.financial_cost}, time to impact {winning.time_to_impact}. "
+        )
+        if rejected:
+            revision += f"I reject {rejected.title} because {rejected.rejection_reason or 'its weighted score was weaker'}."
         context.add_message(
             agent="Simulation Agent",
-            message_type="finding",
-            message=(
-                f"The strongest simulated option is {top.title} at {top.probability}% expected success. "
-                f"Reason: {top.reason}.{comparison}"
-            ),
-            references=[strategy.title for strategy in context.simulations],
-            confidence=86,
-        )
-
-    def _challenge_turn(self, context: DecisionContext) -> None:
-        top = self._top_strategy(context.simulations) if context.simulations else None
-        risk = context.risk_analysis
-        if top is None or risk is None:
-            return
-
-        if top.risk in {"High", "Critical"} and risk.overall_level in {"High", "Critical"}:
-            context.add_message(
-                agent="Planner",
-                message_type="challenge",
-                message=(
-                    f"{top.title} has strong upside but also {top.risk} strategy risk. "
-                    "The council should only forward it if evidence shows the risk is controlled."
-                ),
-                references=[top.title, risk.overall_level],
-                confidence=78,
-            )
-        elif context.open_questions:
-            context.add_message(
-                agent="Planner",
-                message_type="clarification",
-                message=(
-                    f"The council has {len(context.open_questions)} open question(s), but available evidence is sufficient "
-                    "for a human-review recommendation rather than automatic execution."
-                ),
-                references=context.open_questions[:3],
-                confidence=76,
-            )
-        else:
-            context.add_message(
-                agent="Planner",
-                message_type="support",
-                message="Policy, memory, risk, and simulation findings are aligned enough to ask Decision Core for synthesis.",
-                references=[],
-                confidence=82,
-            )
-
-    def _consensus_turn(self, context: DecisionContext) -> None:
-        top = self._top_strategy(context.simulations) if context.simulations else None
-        risk = context.risk_analysis
-        rationale = []
-        disagreements = []
-
-        if context.retrieved_knowledge:
-            rationale.append(f"Knowledge source supports the decision path: {context.retrieved_knowledge[0].title}.")
-        if context.historical_memory:
-            rationale.append(f"Historical memory contributes {len(context.historical_memory)} comparable outcome(s).")
-        if risk:
-            rationale.append(f"Risk analysis sets overall risk at {risk.overall_level}.")
-        if top:
-            rationale.append(f"Simulation ranks {top.title} highest at {top.probability}%.")
-
-        if risk and top and top.risk != risk.overall_level:
-            disagreements.append(
-                f"Strategy risk is {top.risk}, while overall decision risk is {risk.overall_level}; Decision Core should explain this difference."
-            )
-        if context.open_questions:
-            disagreements.append("Some information remains missing and should be visible during human review.")
-
-        confidence = 70
-        if top:
-            confidence = int((top.probability * 0.55) + ((100 - len(context.open_questions) * 8) * 0.2) + 20)
-        confidence = max(50, min(94, confidence))
-
-        context.consensus = Consensus(
-            status="Needs More Information" if not top else "Reached",
-            level="Strong" if confidence >= 84 and not disagreements else "Moderate" if confidence >= 68 else "Weak",
-            preferred_strategy=top.title if top else None,
-            rationale=rationale,
-            disagreements=disagreements,
-            open_questions=context.open_questions,
+            message_type="revision",
+            message=revision,
+            references=[winning.id, *( [rejected.id] if rejected else [] )],
+            evidence_references=[winning.id],
+            supports=[winning.id],
+            challenges=[rejected.id] if rejected else [],
             confidence=confidence,
+            confidence_before=max(40, confidence - 6),
+            confidence_after=confidence,
+            reply_to=len(context.council_messages),
         )
+
+    def _planner_moderates(self, context: DecisionContext) -> None:
+        open_count = len(context.open_questions)
+        action = (
+            "Planner requested human-visible caveats for open questions."
+            if open_count
+            else "Planner closed discussion and sent evidence to Consensus Engine."
+        )
+        context.planner_actions.append(action)
         context.add_message(
-            agent="Executive Council",
+            agent="Planner",
+            message_type="clarification" if open_count else "support",
+            message=(
+                f"I have heard Knowledge, Risk, Memory, and Simulation. Open questions: {open_count}. "
+                "I am forwarding the discussion to Consensus Engine for agreement scoring."
+            ),
+            references=context.open_questions[:3],
+            supports=[context.winning_scenario.id] if context.winning_scenario else [],
+            confidence=78 if open_count else 86,
+            confidence_before=72,
+            confidence_after=78 if open_count else 86,
+            reply_to=len(context.council_messages),
+        )
+
+    def _append_consensus_message(self, context: DecisionContext) -> None:
+        consensus = context.consensus
+        if consensus is None:
+            return
+        context.add_message(
+            agent="Consensus Engine",
             message_type="consensus",
             message=(
-                f"Consensus status: {context.consensus.status}. Preferred strategy: "
-                f"{context.consensus.preferred_strategy or 'not ready'}. Confidence: {context.consensus.confidence}%."
+                f"Consensus {consensus.status}. Strength={consensus.strength}. "
+                f"Agreement score={consensus.agreement_score}/100. Preferred strategy: "
+                f"{consensus.preferred_strategy or 'not ready'}. {consensus.explanation}"
             ),
-            references=context.consensus.rationale,
-            confidence=context.consensus.confidence,
+            references=consensus.rationale[:4],
+            evidence_references=context.supporting_evidence,
+            supports=[context.winning_scenario.id] if context.winning_scenario else [],
+            challenges=context.rejected_arguments[:3],
+            confidence=consensus.confidence,
+            confidence_before=max(40, consensus.confidence - 5),
+            confidence_after=consensus.confidence,
+            reply_to=len(context.council_messages) if context.council_messages else None,
         )
-
-    def _top_strategy(self, strategies: list[SimulationStrategy]) -> SimulationStrategy:
-        return sorted(strategies, key=lambda item: item.probability, reverse=True)[0]
-
-    def _positive_outcome(self, outcome: str) -> bool:
-        normalized = outcome.lower()
-        positive_terms = ["renew", "stayed", "improved", "protected", "closed", "procurement", "success"]
-        negative_terms = ["churn", "resign", "lost", "breach", "failed", "escalated"]
-        if any(term in normalized for term in negative_terms):
-            return False
-        return any(term in normalized for term in positive_terms)
 
     def _all_risks(self, context: DecisionContext):
         if context.risk_analysis is None:

@@ -1,4 +1,180 @@
 {
+  "107fc137d9baf5f1a37f0951b37ae3076e8df49161afc43a87e8634253d7ce01": {
+    "consensus": {
+      "confidence": 0.853,
+      "disagreements": [],
+      "level": "Strong",
+      "open_questions": [
+        "What is the immediate plan to address the staffing gap of 3 to ensure effective huddle execution?"
+      ],
+      "preferred_strategy": "Activate discharge coordination huddle",
+      "rationale": [
+        "The 'Activate discharge coordination huddle' strategy directly addresses the critical issues of high occupancy, delayed discharges, and patient flow bottlenecks.",
+        "It is strongly supported by organizational policies (Discharge Coordination SOP, Bed Capacity Management Policy, Staffing Escalation Policy) and has a clear historical winning pattern for improving capacity.",
+        "The simulation indicates a high success probability (0.86), high capacity improvement, low financial cost, and a relatively quick time to impact (7 Days), making it the most effective and least risky immediate action.",
+        "Inaction, as shown by historical failure patterns, leads to escalated capacity risk, which must be avoided given the critical urgency."
+      ],
+      "status": "Reached"
+    },
+    "discussion": [
+      {
+        "agent": "Planner",
+        "confidence": 1.0,
+        "message": "Surgical Ward A faces critical capacity risk with 91% occupancy, 12 delayed discharges, and a staffing gap of 3. Our top-ranked strategy is 'Activate discharge coordination huddle'.",
+        "message_type": "finding",
+        "references": [
+          "Surgical Ward A",
+          "High Occupancy",
+          "Discharge Delay",
+          "Staffing Gap",
+          "Activate discharge coordination huddle"
+        ]
+      },
+      {
+        "agent": "Knowledge Specialist",
+        "confidence": 0.486,
+        "message": "Our policies strongly support activating discharge coordination huddles. The Discharge Coordination SOP prioritizes addressing transport, pharmacy, and documentation blockers, which are all present. The Bed Capacity Management Policy also mandates discharge coordination when occupancy is high, and the Staffing Escalation Policy requires escalation during high occupancy with staffing gaps.",
+        "message_type": "support",
+        "references": [
+          "kp-health-discharge-sop",
+          "kp-health-bed-capacity",
+          "kp-health-staffing-policy",
+          "Transport Blocker",
+          "Documentation Blocker",
+          "Staffing Gap"
+        ]
+      },
+      {
+        "agent": "Memory Specialist",
+        "confidence": 0.725,
+        "message": "Historical data shows that 'Discharge coordination huddle' has a strong winning pattern, leading to 'Improved capacity'. Conversely, 'Wait for natural discharge' resulted in 'Escalated capacity risk', which we must avoid given the current urgency.",
+        "message_type": "support",
+        "references": [
+          "mp-health-surgical-huddle-improved",
+          "mp-health-wait-delay-risk",
+          "Discharge coordination huddle",
+          "Wait for natural discharge"
+        ]
+      },
+      {
+        "agent": "Risk Specialist",
+        "confidence": 0.78,
+        "message": "The overall risk level is High, driven by 'High Occupancy', 'Discharge Delay', and 'Emergency Pressure'. The proposed 'Activate discharge coordination huddle' has a low business risk and directly addresses these. We must be mindful of the 'Historical failure pattern' associated with inaction.",
+        "message_type": "finding",
+        "references": [
+          "High Occupancy",
+          "Discharge Delay",
+          "Emergency Pressure",
+          "Historical failure pattern",
+          "Activate discharge coordination huddle"
+        ]
+      },
+      {
+        "agent": "Simulation Specialist",
+        "confidence": 0.853,
+        "message": "The 'Activate discharge coordination huddle' scenario shows a high success probability of 0.86, high capacity improvement, and low financial cost, with an expected time to impact of 7 Days. This aligns well with the critical urgency.",
+        "message_type": "support",
+        "references": [
+          "scn-1663abd05eda",
+          "Activate discharge coordination huddle",
+          "High capacity improvement, low cost",
+          "7 Days"
+        ]
+      }
+    ],
+    "supporting_points": [
+      "Surgical Ward A is at high occupancy (91%) with only 4 beds available.",
+      "There are 12 patients in the discharge queue, facing delays due to transport coordination and documentation blockers.",
+      "Staffing coverage is tight with a gap of 3, and increasing emergency admissions are adding pressure.",
+      "The Discharge Coordination SOP recommends huddles to prioritize transport-ready patients, pharmacy blockers, documentation gaps, and family pickup coordination.",
+      "The Bed Capacity Management Policy states that when occupancy exceeds thresholds, operations should trigger capacity review and discharge coordination.",
+      "The Staffing Escalation Policy advises escalating staffing gaps during high occupancy periods.",
+      "Historical memory shows 'Discharge coordination huddle' led to improved capacity, while 'Wait for natural discharge' led to escalated capacity risk.",
+      "The 'Activate discharge coordination huddle' scenario has a high success probability (0.86), high capacity improvement, low cost, and a 7-day time to impact."
+    ]
+  },
+  "1307adb8598036bb758fe65ecee4537445dad87c188cf8e91cd7f96f6d695aea": {
+    "consensus": {
+      "confidence": 0.842,
+      "disagreements": [],
+      "level": "Strong",
+      "open_questions": [],
+      "preferred_strategy": "Schedule security-led technical validation workshop",
+      "rationale": [
+        "The recommended strategy directly addresses the core security and compliance blockers identified in the Atlas Bank deal. It is strongly supported by our established Security Validation Process and has a clear historical precedent of success in similar situations. This approach prioritizes resolving technical and trust issues before considering commercial negotiations, aligning with best practices and avoiding known failure patterns."
+      ],
+      "status": "Reached"
+    },
+    "discussion": [
+      {
+        "agent": "Planner",
+        "confidence": 0.9,
+        "message": "The Atlas Bank enterprise deal is stalled at the Security Review stage due to significant compliance and data residency concerns. Procurement is awaiting technical validation, and a competitor is also being evaluated. We need to unblock this deal effectively.",
+        "message_type": "finding",
+        "references": [
+          "Stalled Deal",
+          "Security Concern",
+          "Compliance Concern",
+          "Technical Validation Required",
+          "Competitive Threat"
+        ]
+      },
+      {
+        "agent": "Knowledge Specialist",
+        "confidence": 0.542,
+        "message": "Our Security Validation Process mandates structured validation with solutions engineering and security leads for security and compliance objections. This is a critical step before moving forward, as also highlighted in the Enterprise Sales Playbook for stalled deals requiring technical expertise.",
+        "message_type": "support",
+        "references": [
+          "kp-sales-security-validation",
+          "kp-sales-enterprise-playbook",
+          "Security Validation Process"
+        ]
+      },
+      {
+        "agent": "Memory Specialist",
+        "confidence": 0.832,
+        "message": "We have a strong winning pattern from a similar Atlas Bank deal where a 'Security-led technical validation workshop' successfully moved the deal to procurement. Conversely, our records show that 'Early pricing discount' strategies have failed when trust or security concerns were unresolved, as seen with the Northstar deal.",
+        "message_type": "finding",
+        "references": [
+          "mp-sales-atlas-security-closed",
+          "mp-sales-northstar-discount-lost",
+          "Security-led technical validation workshop",
+          "Early pricing discount"
+        ]
+      },
+      {
+        "agent": "Risk Specialist",
+        "confidence": 0.6,
+        "message": "The overall risk for this deal is Medium, primarily due to the high-severity security and compliance concerns. The 'Schedule security-led technical validation workshop' strategy carries a low business and operational risk. Importantly, offering a pricing incentive is explicitly avoided when security concerns are present, and executive escalation is not the primary need here.",
+        "message_type": "finding",
+        "references": [
+          "Overall Level: Medium",
+          "Security Concern",
+          "Offer limited pricing incentive",
+          "Escalate executive sponsor alignment",
+          "scn-98e4d640f00c"
+        ]
+      },
+      {
+        "agent": "Simulation Specialist",
+        "confidence": 0.842,
+        "message": "The 'Schedule security-led technical validation workshop' is the top-ranked scenario with an 85.4% success probability and high confidence. It directly addresses the technical validation requirement and trust gap. The other scenarios, such as offering a pricing incentive or escalating executive alignment, were rejected due to conflicting signals like the primary security concern or the deal value.",
+        "message_type": "consensus",
+        "references": [
+          "Schedule security-led technical validation workshop",
+          "scn-98e4d640f00c",
+          "Offer limited pricing incentive",
+          "Escalate executive sponsor alignment"
+        ]
+      }
+    ],
+    "supporting_points": [
+      "Deal stalled due to security and compliance concerns requiring technical validation.",
+      "Security and compliance objections require structured validation with solutions engineering, security leads, and the account executive.",
+      "Historical success with 'Security-led technical validation workshop' in a similar Atlas Bank deal.",
+      "Avoidance of pricing incentives when security concerns are primary, as per policy and historical failure patterns."
+    ]
+  },
   "3de3c45d36bd8daa5d327e0f8760e16f54c9c5eb3902c654b529141d07e341b8": {
     "business_signals": [
       {
@@ -67,6 +243,98 @@
     ],
     "summary": "Nova Retail Group is evaluating Prism for its Southeast Asia expansion, with business stakeholders eager to proceed. However, the CFO has raised concerns about implementation costs and ROI, requesting a detailed value realization plan. A competitor, Nimbus Analytics, has offered a lower-cost solution. Additionally, a security questionnaire is pending, and the deal has been stalled for 12 days, requiring the Sales Manager to strategize for executive approval while protecting deal value.",
     "urgency": "High"
+  },
+  "678a69a6d6c75fa69a2081d48276c9b623ed9368040fcddd32d9ee6786a67786": {
+    "consensus": {
+      "confidence": 0.9,
+      "disagreements": [
+        "While the security workshop addresses key blockers, the high-level CFO concerns regarding ROI and implementation costs will still require a robust value realization discussion post-validation. Executive sponsor alignment might be a secondary action."
+      ],
+      "level": "Strong",
+      "open_questions": [
+        "How will the security-led workshop specifically prepare us to counter the competitor's lower-cost solution and address the CFO's ROI concerns effectively?"
+      ],
+      "preferred_strategy": "Schedule security-led technical validation workshop",
+      "rationale": [
+        "This strategy directly addresses the critical Security Concern and Technical Validation, which are prerequisites for building trust and demonstrating value. It aligns with our policies, historical winning patterns, and avoids the high risks associated with premature discounting, especially given the pending security review and value proposition concerns."
+      ],
+      "status": "Reached"
+    },
+    "discussion": [
+      {
+        "agent": "Planner",
+        "confidence": 0.95,
+        "message": "The Nova Retail Group deal is stalled, facing CFO concerns on cost/ROI, a competitor's lower offer, and a pending security review. We need a clear path forward.",
+        "message_type": "finding",
+        "references": [
+          "Nova Retail Group",
+          "Budget Constraint",
+          "Value Proposition Concern",
+          "Commercial Negotiation",
+          "Security Concern"
+        ]
+      },
+      {
+        "agent": "Knowledge Specialist",
+        "confidence": 0.452,
+        "message": "Our policies advise against offering pricing incentives until business value, security, and authority blockers are fully understood. The Enterprise Sales Playbook also stresses diagnosing the real blocker and involving technical experts before discounting.",
+        "message_type": "finding",
+        "references": [
+          "kp-sales-discount-policy",
+          "kp-sales-enterprise-playbook",
+          "Sales Discount Approval Policy",
+          "Enterprise Sales Playbook"
+        ]
+      },
+      {
+        "agent": "Memory Specialist",
+        "confidence": 0.649,
+        "message": "Historical data shows that 'Security-led technical validation workshops' have been a winning strategy for similar stalled deals with security concerns, while 'Early pricing discounts' have led to losses when trust issues were unresolved.",
+        "message_type": "finding",
+        "references": [
+          "mp-sales-atlas-security-closed",
+          "mp-sales-northstar-discount-lost",
+          "Security-led technical validation workshop",
+          "Early pricing discount"
+        ]
+      },
+      {
+        "agent": "Risk Specialist",
+        "confidence": 0.6,
+        "message": "We have high risks around Budget Constraint, Value Proposition, and Commercial Negotiation, compounded by a pending Security Concern. Offering a pricing incentive now carries a high financial and execution risk, as it conflicts with our policy and historical failure patterns.",
+        "message_type": "challenge",
+        "references": [
+          "Budget Constraint",
+          "Value Proposition Concern",
+          "Commercial Negotiation",
+          "Security Concern",
+          "Historical failure pattern",
+          "Commercial impact possible"
+        ]
+      },
+      {
+        "agent": "Simulation Specialist",
+        "confidence": 0.9,
+        "message": "The 'Schedule security-led technical validation workshop' shows a 90% probability of success with low risk, directly addressing the Security Concern and Technical Validation. Conversely, 'Offer limited pricing incentive' has only a 44% probability and high risk, explicitly violating 'avoid_when' conditions due to the existing Security Concern.",
+        "message_type": "support",
+        "references": [
+          "Schedule security-led technical validation workshop",
+          "Offer limited pricing incentive",
+          "Security Concern",
+          "Technical Validation"
+        ]
+      }
+    ],
+    "supporting_points": [
+      "High severity Budget Constraint, Value Proposition Concern, and Commercial Negotiation signals.",
+      "Medium severity Security Concern and Technical Validation signals.",
+      "Sales Discount Approval Policy and Enterprise Sales Playbook advise against early discounting.",
+      "Security Validation Process mandates structured validation for security objections.",
+      "Historical winning pattern: Security-led technical validation workshop.",
+      "Historical failure pattern: Early pricing discount.",
+      "Simulation projects 90% probability for 'Schedule security-led technical validation workshop'.",
+      "Simulation projects 44% probability for 'Offer limited pricing incentive', with high risk and 'avoid_when' conditions met."
+    ]
   },
   "75cbf87060c68c43999bb72ce37ae7d2a168ed29b4ffd6f4d7fa1499fee3dc52": {
     "consensus": {
@@ -217,6 +485,285 @@
       "'competitor has proposed a lower-cost solution' indicates pricing pressure."
     ]
   },
+  "9330898f9e3021903ef7c03978e49216274596c9cb91302d7ea220464d24d021": {
+    "business_signals": [
+      {
+        "category": "Risk Signal",
+        "evidence": "Supplier shipment is delayed",
+        "label": "Supplier Delay",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "inventory buffer is below threshold",
+        "label": "Low Inventory Buffer",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "SLA deadline this week and a penalty applies",
+        "label": "SLA Exposure",
+        "severity": "Critical"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "Supplier delay threatens high-priority customer delivery",
+        "label": "Customer Impact",
+        "severity": "High"
+      }
+    ],
+    "confidence": 0.95,
+    "decision_type": "Delivery Risk",
+    "entities": [
+      "Tier-1 Component Supplier"
+    ],
+    "extracted_metrics": {
+      "delay_days": 5,
+      "inventory_buffer": "Low",
+      "issue_age_days": 2,
+      "sla_deadline": "2026-07-02",
+      "supplier_score": 62
+    },
+    "primary_problem": "Supplier delay threatens high-priority customer delivery",
+    "required_context": [
+      "Alternate supplier availability",
+      "Emergency inventory reserve levels",
+      "Specific penalty amount for SLA breach"
+    ],
+    "sentiment": "Negative",
+    "stakeholders": [
+      "Operations Manager",
+      "Procurement Lead",
+      "Warehouse Lead",
+      "Supplier Manager"
+    ],
+    "summary": "A Tier-1 Component Supplier shipment is delayed by 5 days, and the inventory buffer is currently low. This situation threatens a high-priority customer delivery with an SLA deadline of 2026-07-02, which is this week, and a penalty will apply if the shipment is not met. A supplier delay was confirmed 2 days ago, and the supplier's score is 62.",
+    "urgency": "Critical"
+  },
+  "a3c1f7e92c7e594155403e4fa6def7bfb9e1050150cd9ebdb3eff361b5d48d26": {
+    "business_signals": [
+      {
+        "category": "Risk Signal",
+        "evidence": "CFO has expressed concerns about implementation costs",
+        "label": "Budget Constraint",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "CFO has expressed concerns about expected ROI",
+        "label": "Value Proposition Concern",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "customer has requested a detailed value realization plan",
+        "label": "Technical Validation",
+        "severity": "Medium"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "competitor has proposed a lower-cost solution",
+        "label": "Commercial Negotiation",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "Security questionnaire pending",
+        "label": "Security Concern",
+        "severity": "Medium"
+      },
+      {
+        "category": "Opportunity Signal",
+        "evidence": "business stakeholders are eager to proceed",
+        "label": "Internal Champion",
+        "severity": "Medium"
+      }
+    ],
+    "confidence": 0.95,
+    "decision_type": "Stalled Deal",
+    "entities": [
+      "Nova Retail Group",
+      "Prism",
+      "Nimbus Analytical",
+      "Southeast Asia"
+    ],
+    "extracted_metrics": {
+      "days_stalled": 12,
+      "deal_value": 780000,
+      "security_questionnaire_pending_days": 9
+    },
+    "primary_problem": "The deal is stalled due to CFO concerns over costs and ROI, a competitor offering a lower-cost solution, and a pending security review.",
+    "required_context": [],
+    "sentiment": "Mixed",
+    "stakeholders": [
+      "CFO",
+      "Business Stakeholders",
+      "Sales Manager",
+      "CIO"
+    ],
+    "summary": "Nova Retail Group is evaluating Prism for its Southeast Asia expansion, with business stakeholders keen to proceed. However, the CFO is concerned about implementation costs and ROI, requesting a detailed value realization plan. A competitor, Nimbus Analytical, has offered a cheaper alternative. Additionally, a security questionnaire has been pending for 9 days, and the deal has been stalled for 12 days at the Executive Review stage, with a deal value of $780,000. The Sales Manager needs to strategize to secure executive approval and protect deal value.",
+    "urgency": "High"
+  },
+  "b6e7ed346337c5646f5b6a386363309de1f887211f79a075205d8ada4ca853b7": {
+    "consensus": {
+      "confidence": 0.696,
+      "disagreements": [],
+      "level": "Moderate",
+      "open_questions": [
+        "What are the current 'Emergency inventory reserve levels'?",
+        "What is the specific 'Future Stockout Risk' associated with using the emergency reserve?",
+        "Is there any possibility of identifying an 'Alternate supplier' for expedited shipment, even if not a primary one, to mitigate future reliance on emergency stock?"
+      ],
+      "preferred_strategy": "Use emergency inventory reserve",
+      "rationale": [
+        "Given the critical SLA exposure and customer impact, 'Use emergency inventory reserve' is the only viable option presented that directly addresses the immediate delivery threat. Other options were rejected due to explicit avoid conditions or high risk. However, the effectiveness of this action hinges on the actual 'Emergency inventory reserve levels' and the specific 'Future Stockout Risk' it might create, which are currently missing."
+      ],
+      "status": "Needs More Information"
+    },
+    "discussion": [
+      {
+        "agent": "Planner",
+        "confidence": 0.95,
+        "message": "We're facing a critical delivery risk with Tier-1 Component Supplier. A 5-day delay and low inventory threaten a high-priority customer SLA this week, incurring penalties.",
+        "message_type": "finding",
+        "references": [
+          "Supplier Delay",
+          "Low Inventory Buffer",
+          "SLA Exposure",
+          "Customer Impact",
+          "Tier-1 Component Supplier"
+        ]
+      },
+      {
+        "agent": "Knowledge Specialist",
+        "confidence": 0.476,
+        "message": "Our SLA Risk Playbook and Inventory Buffer Policy are highly relevant. When SLA breach risk is high, we must compare expedite costs against penalties and customer impact. Emergency inventory can be used if customer impact or SLA penalty outweighs future stockout risk.",
+        "message_type": "finding",
+        "references": [
+          "kp-ops-sla-risk",
+          "kp-ops-inventory-buffer",
+          "SLA Risk Playbook",
+          "Inventory Buffer Policy"
+        ]
+      },
+      {
+        "agent": "Memory Specialist",
+        "confidence": 0.791,
+        "message": "Historical data shows that 'Alternate supplier and expedited shipment' protected SLAs in similar high-priority situations, as seen in 'mp-ops-alternate-supplier-protected'. Conversely, 'Wait for original supplier' led to SLA breaches in 'mp-ops-wait-breached'.",
+        "message_type": "finding",
+        "references": [
+          "mp-ops-alternate-supplier-protected",
+          "mp-ops-wait-breached",
+          "Alternate supplier and expedited shipment",
+          "Wait for original supplier"
+        ]
+      },
+      {
+        "agent": "Risk Specialist",
+        "confidence": 0.87,
+        "message": "The overall risk level is Critical due to high 'Supplier Delay', 'Low Inventory Buffer', 'SLA Exposure', and 'Customer Impact'. We also have medium confidence risks due to missing information on 'Alternate supplier availability', 'Emergency inventory reserve levels', and 'Specific penalty amount for SLA breach'. There's a historical failure pattern associated with waiting.",
+        "message_type": "finding",
+        "references": [
+          "Overall Level: Critical",
+          "Supplier Delay",
+          "Low Inventory Buffer",
+          "SLA Exposure",
+          "Customer Impact",
+          "Alternate supplier availability",
+          "Emergency inventory reserve levels",
+          "Specific penalty amount for SLA breach",
+          "Historical failure pattern"
+        ]
+      },
+      {
+        "agent": "Simulation Specialist",
+        "confidence": 0.696,
+        "message": "Our simulations show 'Use emergency inventory reserve' as the top-ranked viable option. It offers medium delivery protection, though with high buffer cost and potential downstream stockout risk. 'Split fulfillment with alternate supplier and expedited shipment' was rejected due to 'No Alternate Supplier' and 'Wait for original supplier update' was rejected due to the existing 'Supplier Delay' and high SLA risk.",
+        "message_type": "finding",
+        "references": [
+          "scn-56b97777a3fd",
+          "Use emergency inventory reserve",
+          "No Alternate Supplier",
+          "Supplier Delay",
+          "Split fulfillment with alternate supplier and expedited shipment",
+          "Wait for original supplier update"
+        ]
+      }
+    ],
+    "supporting_points": [
+      "Critical SLA Exposure and Customer Impact.",
+      "Rejection of 'Split fulfillment with alternate supplier and expedited shipment' due to 'No Alternate Supplier'.",
+      "Rejection of 'Wait for original supplier update' due to existing 'Supplier Delay' and historical failure patterns.",
+      "Inventory Buffer Policy allowing emergency use under specific conditions.",
+      "Missing information on 'Emergency inventory reserve levels' and 'Alternate supplier availability' impacts decision confidence."
+    ]
+  },
+  "b88182c08ea1c9b22868e0ebe765e02a212ec80916a27cefedac7344cf666b6c": {
+    "business_signals": [
+      {
+        "category": "Risk Signal",
+        "evidence": "security team raised compliance and data residency concerns",
+        "label": "Security Concern",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "compliance and data residency concerns",
+        "label": "Compliance Concern",
+        "severity": "High"
+      },
+      {
+        "category": "Opportunity Signal",
+        "evidence": "procurement is waiting for technical validation",
+        "label": "Technical Validation Required",
+        "severity": "Medium"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "A competitor is also being evaluated",
+        "label": "Competitive Threat",
+        "severity": "Medium"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "deal is stalled",
+        "label": "Stalled Deal",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "Security questionnaire pending",
+        "label": "Security Questionnaire Pending",
+        "severity": "High"
+      }
+    ],
+    "confidence": 0.9,
+    "decision_type": "Stalled Deal",
+    "entities": [
+      "Atlas Bank",
+      "security team",
+      "procurement",
+      "Incumbent vendor",
+      "CIO",
+      "buyer"
+    ],
+    "extracted_metrics": {
+      "Days Stalled": 21,
+      "Deal Value": 420000,
+      "Security Questionnaire Age (Days)": 9
+    },
+    "primary_problem": "Deal stalled due to security and compliance concerns requiring technical validation.",
+    "required_context": [],
+    "sentiment": "Mixed",
+    "stakeholders": [
+      "Buyer",
+      "Security Team",
+      "Procurement",
+      "CIO"
+    ],
+    "summary": "The Atlas Bank enterprise deal, valued at $420,000, has been stalled for 21 days at the Security Review stage. While the buyer is positive about the platform, the security team has raised significant compliance and data residency concerns. Procurement is awaiting technical validation, and an incumbent competitor is also under evaluation, with a security questionnaire pending for 9 days.",
+    "urgency": "High"
+  },
   "c5d5fdc6fb6f3f807149485e3df0d66178637defb81f360f6a4492116120d2a6": {
     "business_signals": [
       {
@@ -262,5 +809,75 @@
     ],
     "summary": "Nova Retail Group's $780,000 enterprise deal is stalled in the Executive Review stage. While business stakeholders support the expansion, the CFO has raised concerns regarding implementation costs and ROI, requesting a value realization plan. The deal faces further risks from a lower-cost proposal by competitor Nimbus Analytics and an outstanding security questionnaire pending for 9 days.",
     "urgency": "High"
+  },
+  "d78066f1b1ee84c688efb6132fd57cbf9226445da3a6c7cbd4cde816b4639347": {
+    "business_signals": [
+      {
+        "category": "Risk Signal",
+        "evidence": "Surgical Ward A is at high occupancy",
+        "label": "High Occupancy",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "Discharge queue is delayed",
+        "label": "Discharge Delay",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "transport coordination",
+        "label": "Transport Blocker",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "documentation blockers",
+        "label": "Documentation Blocker",
+        "severity": "Medium"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "Staffing coverage is tight",
+        "label": "Staffing Gap",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "emergency admissions are increasing",
+        "label": "Emergency Pressure",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "High bed occupancy with delayed discharges",
+        "label": "Patient Flow Bottleneck",
+        "severity": "High"
+      }
+    ],
+    "confidence": 1.0,
+    "decision_type": "Capacity Risk",
+    "entities": [
+      "Surgical Ward A"
+    ],
+    "extracted_metrics": {
+      "available_beds": 4,
+      "discharge_queue": 12,
+      "occupancy_rate": 91,
+      "staffing_gap": 3,
+      "transport_delay_age_days": 1
+    },
+    "primary_problem": "High bed occupancy with delayed discharges and staffing shortages",
+    "required_context": [],
+    "sentiment": "Negative",
+    "stakeholders": [
+      "Hospital Operations Lead",
+      "Charge Nurse",
+      "Clinical Operations",
+      "Unit Manager",
+      "Hospital Administrator"
+    ],
+    "summary": "Surgical Ward A is experiencing high occupancy at 91%, with only 4 beds available. There are 12 patients in the discharge queue, facing delays due to transport coordination and documentation blockers, with a transport delay issue open for 1 day. Staffing coverage is tight with a gap of 3, and increasing emergency admissions are adding pressure, indicating a critical capacity risk with an SLA deadline today at 18:00.",
+    "urgency": "Critical"
   }
 }

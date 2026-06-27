@@ -23,7 +23,7 @@ orchestrator = DecisionOrchestrator(storage)
 app = FastAPI(
     title="Prism API",
     description="Collaborative DecisionContext backend for enterprise decision intelligence.",
-    version="0.4.0",
+    version="0.7.0",
 )
 
 app.add_middleware(
@@ -71,6 +71,30 @@ def list_decisions() -> list[dict[str, Any]]:
     return storage.list_decisions()
 
 
+@app.get("/decision-search")
+def search_decisions(
+    persona_id: str | None = None,
+    decision_type: str | None = None,
+    outcome: str | None = None,
+    min_confidence: int | None = None,
+    decision_id: str | None = None,
+    query: str | None = None,
+) -> list[dict[str, Any]]:
+    return storage.search_decisions(
+        persona_id=persona_id,
+        decision_type=decision_type,
+        outcome=outcome,
+        min_confidence=min_confidence,
+        decision_id=decision_id,
+        query=query,
+    )
+
+
+@app.get("/analytics")
+def decision_analytics() -> dict[str, Any]:
+    return storage.decision_analytics()
+
+
 @app.post("/decisions")
 def create_decision(payload: CreateDecisionRequest) -> dict[str, Any]:
     return storage.create_decision(payload.model_dump())
@@ -82,6 +106,20 @@ def get_decision(decision_id: str) -> dict[str, Any]:
     if decision is None:
         raise HTTPException(status_code=404, detail="Decision not found")
     return decision
+
+
+@app.get("/decisions/{decision_id}/versions")
+def decision_versions(decision_id: str) -> list[dict[str, Any]]:
+    if storage.get_decision(decision_id) is None:
+        raise HTTPException(status_code=404, detail="Decision not found")
+    return storage.list_decision_versions(decision_id)
+
+
+@app.get("/decisions/{decision_id}/lifecycle")
+def decision_lifecycle(decision_id: str) -> list[dict[str, Any]]:
+    if storage.get_decision(decision_id) is None:
+        raise HTTPException(status_code=404, detail="Decision not found")
+    return storage.list_lifecycle_events(decision_id)
 
 
 @app.post("/decisions/{decision_id}/run")

@@ -87,10 +87,10 @@ class LLMService:
             "model": self.settings.model,
             "persona": context.metadata.persona_id,
             "structured_context": context.structured_context.model_dump() if context.structured_context else {},
-            "knowledge_version": [(item.id, item.score) for item in context.retrieved_knowledge],
-            "memory_version": [(item.id, item.outcome, item.relevance) for item in context.historical_memory],
+            "knowledge_version": [(item.id, item.weighted_score, item.document_id) for item in context.knowledge_packets],
+            "memory_version": [(item.id, item.outcome, item.weighted_score, item.source_decision) for item in context.memory_packets],
             "risk_version": context.risk_analysis.model_dump() if context.risk_analysis else {},
-            "simulation_version": [(item.title, item.probability, item.risk) for item in context.simulations],
+            "scenario_version": [(item.id, item.weighted_score, item.success_probability, item.business_risk) for item in context.scenario_packets],
         }
 
         raw_result = self._generate_json("executive_council", prompt, cache_payload)
@@ -216,18 +216,24 @@ class LLMService:
                 message=message.message,
                 references=message.references,
                 confidence=message.confidence,
+                reply_to=message.reply_to,
+                supports=message.supports,
+                challenges=message.challenges,
+                evidence_references=message.references,
             )
             for index, message in enumerate(parsed.discussion, start=1)
         ]
 
         simulation_titles = {strategy.title for strategy in context.simulations}
+        scenario_titles = {scenario.title for scenario in context.scenario_packets}
+        available_titles = scenario_titles or simulation_titles
         preferred = parsed.consensus.preferred_strategy
         disagreements = list(parsed.consensus.disagreements)
-        if preferred and preferred not in simulation_titles:
+        if preferred and preferred not in available_titles:
             disagreements.append(
-                f"LLM consensus referenced '{preferred}', which is not an available simulated strategy."
+                f"LLM consensus referenced '{preferred}', which is not an available scenario strategy."
             )
-            preferred = context.simulations[0].title if context.simulations else None
+            preferred = context.winning_scenario.title if context.winning_scenario else context.simulations[0].title if context.simulations else None
 
         consensus = Consensus(
             status=parsed.consensus.status,

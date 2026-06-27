@@ -7,7 +7,17 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 
 RiskLevel = Literal["Low", "Medium", "High", "Critical"]
 Sentiment = Literal["Positive", "Neutral", "Negative", "Mixed"]
-MessageType = Literal["finding", "question", "challenge", "support", "clarification", "consensus"]
+MessageType = Literal[
+    "finding",
+    "question",
+    "challenge",
+    "support",
+    "clarification",
+    "disagreement",
+    "evidence",
+    "revision",
+    "consensus",
+]
 
 
 class LLMContextSignal(BaseModel):
@@ -50,10 +60,36 @@ class LLMCouncilMessage(BaseModel):
     message: str
     references: list[str] = Field(default_factory=list)
     confidence: int | None = Field(default=None, ge=0, le=100)
+    reply_to: int | None = None
+    supports: list[str] = Field(default_factory=list)
+    challenges: list[str] = Field(default_factory=list)
 
-    @field_validator("references", mode="before")
+    @model_validator(mode="before")
     @classmethod
-    def normalize_references(cls, value: Any) -> list[str]:
+    def accept_category_alias(cls, value: Any) -> Any:
+        if not isinstance(value, dict):
+            return value
+        transformed = dict(value)
+        if "category" in transformed and "message_type" not in transformed:
+            transformed["message_type"] = str(transformed["category"]).lower()
+        return transformed
+
+    @field_validator("confidence", mode="before")
+    @classmethod
+    def normalize_confidence(cls, value: Any) -> int | None:
+        if value is None:
+            return None
+        try:
+            numeric = float(value)
+        except (TypeError, ValueError):
+            return None
+        if 0 <= numeric <= 1:
+            return round(numeric * 100)
+        return round(numeric)
+
+    @field_validator("references", "supports", "challenges", mode="before")
+    @classmethod
+    def normalize_string_list(cls, value: Any) -> list[str]:
         if value is None:
             return []
         if isinstance(value, str):
@@ -71,6 +107,17 @@ class LLMCouncilConsensus(BaseModel):
     disagreements: list[str] = Field(default_factory=list)
     open_questions: list[str] = Field(default_factory=list)
     confidence: int = Field(default=70, ge=0, le=100)
+
+    @field_validator("confidence", mode="before")
+    @classmethod
+    def normalize_confidence(cls, value: Any) -> int:
+        try:
+            numeric = float(value)
+        except (TypeError, ValueError):
+            return 70
+        if 0 <= numeric <= 1:
+            return round(numeric * 100)
+        return round(numeric)
 
     @model_validator(mode="before")
     @classmethod

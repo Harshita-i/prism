@@ -1,42 +1,42 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 from app.core.decision_context import DecisionContext, KnowledgeFinding
+from app.knowledge.engine import KnowledgeEngine
 
 
 class KnowledgeAgent:
     name = "Knowledge Agent"
 
-    def __init__(self, storage: Any, limit: int = 3) -> None:
+    def __init__(self, storage: Any, limit: int = 4, engine: KnowledgeEngine | None = None) -> None:
         self.storage = storage
         self.limit = limit
+        root = Path(__file__).resolve().parents[2]
+        self.engine = engine or KnowledgeEngine(storage=storage, root=root)
 
     def analyze(self, context: DecisionContext) -> DecisionContext:
         structured = self._structured(context)
-        query = f"{context.metadata.persona_id} {context.metadata.domain} {structured.retrieval_query()}"
-        docs = self.storage.query_knowledge(query, limit=self.limit)
+        packets = self.engine.retrieve_packets(structured, context.persona, limit=self.limit)
+        context.knowledge_packets = packets
 
         context.retrieved_knowledge = [
             KnowledgeFinding(
-                id=doc["id"],
-                title=doc["title"],
-                source_type=doc["source_type"],
-                domain=doc["domain"],
-                excerpt=doc["excerpt"],
-                score=float(doc.get("score", 0)),
-                constraints=self._constraints_from(doc),
+                id=packet.id,
+                title=packet.title,
+                source_type=packet.source_type,
+                domain=packet.domain,
+                excerpt=packet.finding,
+                score=packet.weighted_score,
+                constraints=packet.constraints,
             )
-            for doc in docs
+            for packet in packets
         ]
+        context.llm_metadata["knowledge_engine"] = self.engine.metadata
         return context
 
     def _structured(self, context: DecisionContext):
         if context.structured_context is None:
             raise ValueError("KnowledgeAgent requires structured_context.")
         return context.structured_context
-
-    def _constraints_from(self, doc: dict[str, Any]) -> list[str]:
-        excerpt = doc.get("excerpt", "")
-        sentences = [item.strip() for item in excerpt.split(".") if item.strip()]
-        return sentences[:2]

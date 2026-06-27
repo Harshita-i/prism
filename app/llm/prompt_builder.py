@@ -62,10 +62,26 @@ class PromptBuilder:
                 PromptSection("Persona Context", self._persona_context(context.persona)),
                 PromptSection("Planner Context", self._planner_context(context)),
                 PromptSection("Business Context", context.structured_context.model_dump() if context.structured_context else {}),
-                PromptSection("Knowledge Findings", [item.model_dump() for item in context.retrieved_knowledge]),
-                PromptSection("Historical Memory", [item.model_dump() for item in context.historical_memory]),
+                PromptSection("Knowledge Packets", [item.model_dump() for item in context.knowledge_packets]),
+                PromptSection("Memory Packets", [item.model_dump() for item in context.memory_packets]),
+                PromptSection(
+                    "Organizational Learning Patterns",
+                    {
+                        "winning_patterns": [item.model_dump() for item in context.winning_patterns],
+                        "failure_patterns": [item.model_dump() for item in context.failure_patterns],
+                        "memory_confidence": context.memory_confidence,
+                    },
+                ),
                 PromptSection("Risk Analysis", context.risk_analysis.model_dump() if context.risk_analysis else {}),
-                PromptSection("Simulation Results", [item.model_dump() for item in context.simulations]),
+                PromptSection(
+                    "Scenario Packets",
+                    {
+                        "winning_scenario": context.winning_scenario.model_dump() if context.winning_scenario else None,
+                        "scenario_packets": [item.model_dump() for item in context.scenario_packets],
+                        "rejected_scenarios": [item.model_dump() for item in context.rejected_scenarios],
+                        "scenario_metrics": context.scenario_metrics.model_dump(),
+                    },
+                ),
                 PromptSection("JSON Contract", self._council_contract()),
             ],
         )

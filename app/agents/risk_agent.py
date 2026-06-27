@@ -82,12 +82,12 @@ class RiskAgent:
 
     def _operational_risks(self, context: DecisionContext) -> list[RiskFinding]:
         risks = []
-        if not context.retrieved_knowledge:
+        if not context.knowledge_packets:
             risks.append(
                 RiskFinding(
                     label="Limited policy grounding",
                     level="Medium",
-                    rationale="No knowledge source was retrieved for this decision.",
+                    rationale="No Knowledge Packet was generated for this decision.",
                 )
             )
         return risks
@@ -109,14 +109,14 @@ class RiskAgent:
 
     def _execution_risks(self, context: DecisionContext) -> list[RiskFinding]:
         risks = []
-        if context.historical_memory:
-            failed = [case for case in context.historical_memory if self._negative_outcome(case.outcome)]
+        if context.memory_packets:
+            failed = [case for case in context.memory_packets if self._negative_outcome(case.outcome)]
             if failed:
                 risks.append(
                     RiskFinding(
                         label="Historical failure pattern",
                         level="High" if len(failed) > 1 else "Medium",
-                        rationale=f"{len(failed)} similar historical case(s) had weak outcomes.",
+                        rationale=f"{len(failed)} Memory Packet(s) show weak historical outcomes.",
                         evidence=", ".join(case.outcome for case in failed[:3]),
                     )
                 )
