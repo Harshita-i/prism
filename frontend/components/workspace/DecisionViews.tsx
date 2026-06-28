@@ -9,16 +9,15 @@ import {
   BookOpen,
   BrainCircuit,
   CheckCircle2,
-  Clock3,
   FileText,
   GitBranch,
   MessageSquareText,
   ShieldAlert,
   Sparkles,
   Target,
-  TrendingUp,
   XCircle,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { usePrism } from "@/components/workspace/PrismProvider";
 import { EmptyState } from "@/components/workspace/EmptyState";
 import { ProgressBar } from "@/components/workspace/ProgressBar";
@@ -97,7 +96,7 @@ export function DecisionOverview({ decision }: { decision: Decision }) {
       <section className="surface rounded-lg p-5">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-black text-slate-950">{decision.title}</h2>
+            <h2 className="text-lg font-black text-slate-950">Decision summary</h2>
             <p className="mt-1 text-sm leading-6 text-slate-600">
               {card?.executive_summary || decision.input?.interaction_text}
             </p>
@@ -110,7 +109,65 @@ export function DecisionOverview({ decision }: { decision: Decision }) {
           <InfoTile label="Time To Impact" value={enterprise?.time_to_impact || card?.recommendation?.time_to_impact || "--"} />
         </div>
       </section>
+
+      <section className="surface rounded-lg p-5">
+        <div className="mb-4">
+          <h2 className="text-lg font-black text-slate-950">What to check next</h2>
+          <p className="mt-1 text-sm leading-6 text-slate-600">
+            Use these guided shortcuts instead of hunting through every workspace.
+          </p>
+        </div>
+        <div className="grid gap-3 md:grid-cols-4">
+          <GuidedLink
+            href="/council"
+            icon={BrainCircuit}
+            title="How agents discussed it"
+            description="Replay the AI expert meeting."
+          />
+          <GuidedLink
+            href="/evidence"
+            icon={BookOpen}
+            title="Why Prism believes it"
+            description="See proof, memory, and lessons."
+          />
+          <GuidedLink
+            href="/analysis"
+            icon={BarChart3}
+            title="What options were compared"
+            description="Review scenarios and risks."
+          />
+          <GuidedLink
+            href="#decision-tabs"
+            icon={Target}
+            title="Approve or reject"
+            description="Use the Recommendation tab above."
+          />
+        </div>
+      </section>
     </div>
+  );
+}
+
+function GuidedLink({
+  href,
+  icon: Icon,
+  title,
+  description,
+}: {
+  href: string;
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="focus-ring rounded-lg border border-slate-200 bg-white p-4 transition hover:border-teal-300 hover:bg-teal-50"
+    >
+      <Icon className="h-5 w-5 text-teal-700" />
+      <div className="mt-3 text-sm font-black text-slate-950">{title}</div>
+      <p className="mt-1 text-xs leading-5 text-slate-500">{description}</p>
+    </Link>
   );
 }
 
@@ -348,12 +405,16 @@ export function RecommendationWorkspace({ decision }: { decision: Decision | nul
   }
   const enterprise = card.enterprise_decision_card;
   const action = card.recommendation;
+  const reviewStatus = card.approval_status || card.human_review?.status || "pending";
+  const normalizedReviewStatus = reviewStatus.toLowerCase();
+  const approved = normalizedReviewStatus === "approve";
+  const reviewLocked = normalizedReviewStatus !== "pending";
 
-  const reviewButtons: Array<{ label: string; action: ReviewAction; tone: string }> = [
-    { label: "Approve", action: "approve", tone: "bg-emerald-600 text-white hover:bg-emerald-700" },
-    { label: "Request Changes", action: "request_changes", tone: "bg-sky-50 text-sky-900 hover:bg-sky-100" },
-    { label: "Reject", action: "reject", tone: "bg-rose-50 text-rose-900 hover:bg-rose-100" },
-    { label: "More Info", action: "request_more_information", tone: "bg-slate-100 text-slate-800 hover:bg-slate-200" },
+  const reviewButtons: Array<{ label: string; helper: string; action: ReviewAction; tone: string }> = [
+    { label: "Approve", helper: "Saves approval and unlocks outcome tracking.", action: "approve", tone: "bg-emerald-600 text-white hover:bg-emerald-700" },
+    { label: "Request Changes", helper: "Keeps it in review and records a new version.", action: "request_changes", tone: "bg-sky-50 text-sky-900 hover:bg-sky-100" },
+    { label: "Reject", helper: "Stops the recommendation and logs why.", action: "reject", tone: "bg-rose-50 text-rose-900 hover:bg-rose-100" },
+    { label: "More Info", helper: "Pauses approval until more evidence is checked.", action: "request_more_information", tone: "bg-slate-100 text-slate-800 hover:bg-slate-200" },
   ];
 
   return (
@@ -395,20 +456,26 @@ export function RecommendationWorkspace({ decision }: { decision: Decision | nul
         <section className="surface rounded-lg p-5">
           <h3 className="text-base font-black text-slate-950">Human Review</h3>
           <div className="mt-3">
-            <StatusBadge tone={card.approval_status === "approve" ? "green" : "amber"}>
-              {card.approval_status || card.human_review?.status || "pending"}
+            <StatusBadge tone={approved ? "green" : "amber"}>
+              {reviewStatus}
             </StatusBadge>
           </div>
+          {reviewLocked && (
+            <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm leading-6 text-slate-600">
+              Human review is already saved. To change the decision later, create a new version or rerun the decision.
+            </div>
+          )}
           <div className="mt-4 grid gap-2">
             {reviewButtons.map((button) => (
               <button
                 key={button.action}
                 type="button"
-                disabled={loading}
+                disabled={loading || reviewLocked}
                 onClick={() => void reviewActive(button.action, `Reviewer selected ${button.action}.`)}
                 className={`focus-ring min-h-11 rounded-lg px-3 text-sm font-black ${button.tone}`}
               >
-                {button.label}
+                <span className="block">{button.label}</span>
+                <span className="mt-1 block text-xs font-bold opacity-75">{button.helper}</span>
               </button>
             ))}
           </div>
@@ -416,13 +483,17 @@ export function RecommendationWorkspace({ decision }: { decision: Decision | nul
 
         <section className="surface rounded-lg p-5">
           <h3 className="text-base font-black text-slate-950">Outcome Tracking</h3>
-          <p className="mt-2 text-sm leading-6 text-slate-600">Record what happened after execution so Prism memory can learn.</p>
+          <p className="mt-2 text-sm leading-6 text-slate-600">
+            {approved
+              ? "Record what happened after execution so Prism memory can learn."
+              : "Approve the decision first. Outcome tracking becomes useful after a human accepts the recommendation."}
+          </p>
           <div className="mt-4 grid gap-2">
             {["Succeeded", "Partially Successful", "Failed", "Cancelled"].map((outcome) => (
               <button
                 key={outcome}
                 type="button"
-                disabled={loading}
+                disabled={loading || !approved}
                 onClick={() => void recordActiveOutcome(outcome, `Business outcome recorded as ${outcome}.`)}
                 className="focus-ring min-h-11 rounded-lg bg-slate-950 px-3 text-sm font-black text-white hover:bg-slate-800"
               >
@@ -488,7 +559,7 @@ export function ActivityWorkspace({ decision }: { decision: Decision | null }) {
                 <div>
                   <div className="text-sm font-black text-slate-950">{event.stage}</div>
                   <div className="mt-1 text-xs font-bold text-slate-500">
-                    {event.actor} · {titleCase(event.status)} · {shortDate(event.timestamp)}
+                    {event.actor} - {titleCase(event.status)} - {shortDate(event.timestamp)}
                   </div>
                   {event.notes && <p className="mt-2 text-sm leading-6 text-slate-600">{event.notes}</p>}
                 </div>
@@ -511,7 +582,7 @@ export function ActivityWorkspace({ decision }: { decision: Decision | null }) {
                   <StatusBadge tone="slate">{version.change_type}</StatusBadge>
                 </div>
                 <div className="mt-1 text-xs font-bold text-slate-500">
-                  {version.actor} · {shortDate(version.created_at || version.timestamp)}
+                  {version.actor} - {shortDate(version.created_at || version.timestamp)}
                 </div>
                 <SimpleList items={version.change_log || []} empty="No change log." />
               </div>
@@ -567,16 +638,12 @@ export function DecisionTabs({ decision }: { decision: Decision }) {
   const [activeTab, setActiveTab] = useState("overview");
   const tabs = [
     { id: "overview", label: "Overview", icon: FileText },
-    { id: "discussion", label: "Discussion", icon: BrainCircuit },
-    { id: "evidence", label: "Evidence", icon: BookOpen },
-    { id: "analysis", label: "Analysis", icon: BarChart3 },
     { id: "recommendation", label: "Recommendation", icon: Target },
-    { id: "activity", label: "Activity", icon: Activity },
   ];
 
   return (
     <div>
-      <div className="mb-5 flex gap-2 overflow-x-auto rounded-lg border border-slate-200 bg-white p-1 tiny-scroll">
+      <div id="decision-tabs" className="mb-5 flex gap-2 overflow-x-auto rounded-lg border border-slate-200 bg-white p-1 tiny-scroll">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const selected = activeTab === tab.id;
@@ -596,11 +663,7 @@ export function DecisionTabs({ decision }: { decision: Decision }) {
         })}
       </div>
       {activeTab === "overview" && <DecisionOverview decision={decision} />}
-      {activeTab === "discussion" && <CouncilTimeline decision={decision} />}
-      {activeTab === "evidence" && <EvidenceWorkspace decision={decision} />}
-      {activeTab === "analysis" && <AnalysisWorkspace decision={decision} />}
       {activeTab === "recommendation" && <RecommendationWorkspace decision={decision} />}
-      {activeTab === "activity" && <ActivityWorkspace decision={decision} />}
     </div>
   );
 }

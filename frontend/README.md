@@ -9,13 +9,20 @@ This keeps the existing backend APIs and business logic intact.
 - Workspace sidebar with separate routes
 - Dashboard overview page
 - Decisions list page
-- Decision details page with tabs
+- Decision details page with only Overview and Recommendation tabs
 - Executive Council workspace
 - Evidence workspace
 - Analysis workspace
 - Outcomes workspace
 - Analytics workspace
 - Integrations and Settings pages
+- Guided demo path for new users
+- Action popups after approve, reject, request changes, and outcome recording
+- Clear Refresh data wording instead of unclear sync behavior
+- Create Decision form appears only on Decisions page
+- Review buttons lock after one human choice is saved
+- Decision details no longer has an Activity tab
+- Prism product mark replaces the generic sparkle icon
 
 ## Copy Into Your Frontend
 

@@ -37,7 +37,9 @@ export function DecisionsPage() {
           <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
               <h2 className="text-lg font-black text-slate-950">Decision List</h2>
-              <p className="mt-1 text-sm text-slate-600">{filtered.length} decision(s)</p>
+              <p className="mt-1 text-sm text-slate-600">
+                {filtered.length} decision(s). After creating one, click its card to open review, recommendation, and activity.
+              </p>
             </div>
             <label className="relative block md:w-80">
               <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-400" />

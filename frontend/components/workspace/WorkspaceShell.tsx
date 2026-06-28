@@ -17,8 +17,10 @@ import {
   Settings,
   Sparkles,
   TrendingUp,
+  X,
 } from "lucide-react";
 import { usePrism } from "@/components/workspace/PrismProvider";
+import { PrismLogo } from "@/components/workspace/PrismLogo";
 import { StatusBadge } from "@/components/workspace/StatusBadge";
 
 type NavItem = {
@@ -82,7 +84,7 @@ function NavigationGroup({ title, children, defaultOpen = true }: { title: strin
 
 export function WorkspaceShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { decisions, activeDecision, activeDecisionId, setActiveDecisionId, loading, statusMessage, error, refresh } =
+  const { decisions, activeDecision, activeDecisionId, setActiveDecisionId, loading, statusMessage, error, notice, clearNotice, refresh } =
     usePrism();
 
   return (
@@ -90,7 +92,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-slate-200 bg-white lg:flex lg:flex-col">
         <div className="flex h-20 items-center gap-3 border-b border-slate-200 px-5">
           <div className="grid h-11 w-11 place-items-center rounded-xl bg-slate-950 text-white">
-            <Sparkles className="h-5 w-5" />
+            <PrismLogo className="h-6 w-6" />
           </div>
           <div>
             <div className="text-xl font-black tracking-tight">Prism</div>
@@ -130,7 +132,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
           <div className="flex min-h-16 flex-col gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between md:px-6">
             <div className="flex min-w-0 items-center gap-3">
               <div className="grid h-10 w-10 place-items-center rounded-lg bg-slate-950 text-white lg:hidden">
-                <Sparkles className="h-4 w-4" />
+                <PrismLogo className="h-5 w-5" />
               </div>
               <div className="min-w-0">
                 <div className="text-xs font-black uppercase tracking-wide text-slate-400">Active Decision</div>
@@ -162,9 +164,10 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
                 type="button"
                 onClick={() => void refresh()}
                 className="focus-ring inline-flex min-h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-sm font-bold text-slate-700 hover:bg-slate-50"
+                title="Reload latest decisions and analytics from the backend"
               >
                 <RefreshCcw className="h-4 w-4" />
-                Sync
+                Refresh data
               </button>
             </div>
           </div>
@@ -189,7 +192,7 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
               <div>
                 <div className="font-black">Backend connection needed</div>
                 <p className="mt-1 leading-6">
-                  Start FastAPI on port 8000, then click Sync. The UI is ready; it just needs live decision data.
+                  Start FastAPI on port 8000, then click Refresh data. The UI is ready; it just needs live decision data.
                 </p>
               </div>
             </div>
@@ -197,6 +200,45 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </div>
+
+      {notice && (
+        <div className="fixed bottom-5 right-5 z-50 w-[min(420px,calc(100vw-2rem))] rounded-xl border border-slate-200 bg-white p-4 shadow-2xl">
+          <div className="flex items-start gap-3">
+            <span
+              className={`mt-1 h-3 w-3 rounded-full ${
+                notice.tone === "success"
+                  ? "bg-emerald-500"
+                  : notice.tone === "warning"
+                    ? "bg-amber-500"
+                    : notice.tone === "error"
+                      ? "bg-rose-500"
+                      : "bg-sky-500"
+              }`}
+            />
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-black text-slate-950">{notice.title}</div>
+              <p className="mt-1 text-sm leading-6 text-slate-600">{notice.message}</p>
+              {notice.actionHref && (
+                <Link
+                  href={notice.actionHref}
+                  onClick={clearNotice}
+                  className="mt-3 inline-flex min-h-9 items-center rounded-lg bg-slate-950 px-3 text-sm font-black text-white hover:bg-slate-800"
+                >
+                  {notice.actionLabel || "Open"}
+                </Link>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={clearNotice}
+              className="focus-ring grid h-8 w-8 place-items-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              aria-label="Dismiss notification"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { Activity, CheckCircle2, Clock3, TrendingUp } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, Activity, CheckCircle2, Clock3, TrendingUp } from "lucide-react";
 import { ActivityWorkspace, DecisionRecordCard } from "@/components/workspace/DecisionViews";
 import { EmptyState } from "@/components/workspace/EmptyState";
 import { PageHeader } from "@/components/workspace/PageHeader";
@@ -17,6 +18,14 @@ export function OutcomesPage() {
         title="Outcomes"
         description="Track completed decisions, outcomes, feedback, memory learning, lifecycle history, and impact metrics."
         icon={TrendingUp}
+        action={
+          activeDecision ? (
+            <Link href={`/decisions/${activeDecision.id}`} className="focus-ring inline-flex min-h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-sm font-black text-slate-700 hover:bg-slate-50">
+              <ArrowLeft className="h-4 w-4" />
+              Back to decision
+            </Link>
+          ) : null
+        }
       />
 
       <div className="grid gap-4 md:grid-cols-4">

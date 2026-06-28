@@ -244,6 +244,244 @@
     "summary": "Nova Retail Group is evaluating Prism for its Southeast Asia expansion, with business stakeholders eager to proceed. However, the CFO has raised concerns about implementation costs and ROI, requesting a detailed value realization plan. A competitor, Nimbus Analytics, has offered a lower-cost solution. Additionally, a security questionnaire is pending, and the deal has been stalled for 12 days, requiring the Sales Manager to strategize for executive approval while protecting deal value.",
     "urgency": "High"
   },
+  "628153641770bb3dbae5813e647ad90e48daff5d5e001318b09a2c1f602073c6": {
+    "consensus": {
+      "confidence": 0.876,
+      "disagreements": [],
+      "level": "Strong",
+      "open_questions": [],
+      "preferred_strategy": "Schedule security-led technical validation workshop",
+      "rationale": [
+        "The Atlas Bank deal is stalled due to critical security and compliance concerns, which require direct technical validation.",
+        "Historical data strongly supports that security-led technical validation workshops lead to successful outcomes in similar stalled deals.",
+        "Relevant policies and processes mandate structured technical validation for security and compliance objections.",
+        "Alternative strategies like executive escalation were rejected due to low deal value, and pricing incentives were rejected due to the presence of security concerns and a historical failure pattern."
+      ],
+      "status": "Reached"
+    },
+    "discussion": [
+      {
+        "agent": "Planner",
+        "confidence": 0.9,
+        "message": "The Atlas Bank enterprise deal is stalled at the Security Review stage due to high-severity compliance and data residency concerns. Procurement is awaiting technical validation, and we face a competitive threat. We need a clear path forward to unblock this deal.",
+        "message_type": "finding",
+        "references": [
+          "Atlas Bank",
+          "Stalled Deal",
+          "Security Concern",
+          "Compliance Concern",
+          "Technical Validation Required",
+          "Competitive Threat"
+        ]
+      },
+      {
+        "agent": "Knowledge Specialist",
+        "confidence": 0.542,
+        "message": "Our Security Validation Process explicitly states that security and compliance objections require structured validation with solutions engineering. The Enterprise Sales Playbook also advises involving technical experts for product risk and avoiding early discounting until trust is confirmed.",
+        "message_type": "finding",
+        "references": [
+          "kp-sales-security-validation",
+          "kp-sales-enterprise-playbook",
+          "kp-sales-discount-policy"
+        ]
+      },
+      {
+        "agent": "Memory Specialist",
+        "confidence": 0.973,
+        "message": "We have strong historical evidence. 'Schedule security-led technical validation workshop' is a winning pattern, appearing in 2 similar past decisions, and 'Security-led technical validation workshop' in another, all leading to deals moving to procurement. Conversely, 'Early pricing discount' is a known failure pattern, leading to a 'Lost' outcome in a similar scenario where trust concerns were unresolved.",
+        "message_type": "finding",
+        "references": [
+          "winning_patterns",
+          "failure_patterns",
+          "mp-d529535f-29b1-453c-a04c-e9b528804036",
+          "mp-sales-atlas-security-closed",
+          "mp-case-68a84d93-0195-427f-b94a-ba70842b0e4a",
+          "mp-sales-northstar-discount-lost"
+        ]
+      },
+      {
+        "agent": "Risk Specialist",
+        "confidence": 0.6,
+        "message": "The primary business risks are high: Security Concern, Compliance Concern, and the Stalled Deal itself. Technical validation is clearly required. The 'Schedule security-led technical validation workshop' strategy directly addresses these high-level risks with a low business and operational risk profile. Offering pricing incentives at this stage carries a 'Commercial impact possible' risk and aligns with a 'Historical failure pattern' when security concerns are paramount.",
+        "message_type": "finding",
+        "references": [
+          "Security Concern",
+          "Compliance Concern",
+          "Stalled Deal",
+          "Technical Validation Required",
+          "Commercial impact possible",
+          "Historical failure pattern"
+        ]
+      },
+      {
+        "agent": "Simulation Specialist",
+        "confidence": 0.876,
+        "message": "The simulation strongly favors 'Schedule security-led technical validation workshop' with a high success probability of 0.874 and low associated risks. This scenario has exceptional historical support (0.973) and solid knowledge support. 'Escalate executive sponsor alignment' was rejected due to the deal value not meeting the threshold, and 'Offer limited pricing incentive' was rejected because security concerns are the primary blocker, not pricing.",
+        "message_type": "finding",
+        "references": [
+          "scn-5ce61905e68a",
+          "Escalate executive sponsor alignment",
+          "Offer limited pricing incentive",
+          "Low Deal Value",
+          "Security Concern"
+        ]
+      }
+    ],
+    "supporting_points": [
+      "The Atlas Bank deal is stalled for 21 days at the Security Review stage due to compliance and data residency concerns.",
+      "Procurement is awaiting technical validation, and a competitor is being evaluated.",
+      "The 'Security Validation Process' and 'Enterprise Sales Playbook' recommend structured technical validation for security and compliance objections.",
+      "Historical data shows 'Schedule security-led technical validation workshop' is a highly successful strategy for similar stalled deals.",
+      "Offering pricing incentives is a known failure pattern when security and trust issues are the primary blockers.",
+      "The winning strategy has a high success probability (0.874) and low business/operational risk."
+    ]
+  },
+  "65885ee62756275f2a63d63e2381920a79e0bfde13f3922d6f90ad1da30e7a08": {
+    "consensus": {
+      "confidence": 0.85,
+      "disagreements": [
+        "The absence of specific details on budget constraints, organizational restructuring, and internal promotion policies poses a medium confidence risk, potentially impacting the long-term optimization of Greeshma's growth path."
+      ],
+      "level": "Strong",
+      "open_questions": [
+        "What are the specific budget constraints impacting promotions?",
+        "What are the specific organizational restructuring plans and their timeline?",
+        "What are the specific internal promotion policies and criteria for Greeshma's role?",
+        "What are the available compensation limits for retention, should a compensation review become necessary later?"
+      ],
+      "preferred_strategy": "Create structured retention plan",
+      "rationale": [
+        "The 'Create structured retention plan' directly addresses the critical attrition risk by tackling multiple identified root causes: growth concern, recognition concern, high workload, and manager support gap.",
+        "This strategy is strongly supported by historical success patterns, where similar plans led to employee retention.",
+        "It aligns with our 'Employee Retention Playbook' and 'Workload Risk Policy' by emphasizing early intervention, workload management, and career path discussions.",
+        "The plan offers a high retention impact at a low cost and can be implemented within 14 days, crucial given the critical urgency."
+      ],
+      "status": "Reached"
+    },
+    "discussion": [
+      {
+        "agent": "Planner",
+        "confidence": 0.9,
+        "message": "Council, we face a critical retention risk with Greeshma, a high-performing senior engineer considering resignation due to a delayed promotion and declining morale. Urgency is critical.",
+        "message_type": "finding",
+        "references": [
+          "Primary Problem",
+          "Urgency: Critical",
+          "Attrition Risk"
+        ]
+      },
+      {
+        "agent": "Knowledge Specialist",
+        "confidence": 0.8,
+        "message": "Our playbooks recommend a comprehensive approach. The 'Employee Retention Playbook' (kp-hr-retention-playbook) advises diagnosing workload, manager support, growth path, and recognition concerns. The 'Internal Mobility Guidelines' (kp-hr-mobility-guide) specifically address growth concerns with transparent career path discussions and mentorship. The 'Workload Risk Policy' (kp-hr-workload-policy) mandates manager check-ins for high workload, which Greeshma is experiencing.",
+        "message_type": "finding",
+        "references": [
+          "kp-hr-retention-playbook",
+          "kp-hr-mobility-guide",
+          "kp-hr-workload-policy",
+          "Growth Concern",
+          "Recognition Concern",
+          "High Workload",
+          "Manager Support Gap"
+        ]
+      },
+      {
+        "agent": "Memory Specialist",
+        "confidence": 0.75,
+        "message": "Historical data strongly supports a 'Structured retention plan' (mp-hr-engineer-retention-stayed) in similar cases involving high workload and growth concerns, leading to positive outcomes. Conversely, waiting or inaction, as seen in 'Low engagement and no timely manager action' (mp-hr-wait-attrition), resulted in resignation. We must act decisively.",
+        "message_type": "finding",
+        "references": [
+          "mp-hr-engineer-retention-stayed",
+          "mp-hr-wait-attrition",
+          "Winning pattern: Structured retention plan",
+          "Failure pattern: Wait until next review cycle"
+        ]
+      },
+      {
+        "agent": "Risk Specialist",
+        "confidence": 0.9,
+        "message": "The attrition risk is critical, evidenced by Greeshma considering resignation and responding to recruiters. High growth, recognition, and workload concerns are significant business risks. Furthermore, we have medium confidence risks due to missing information on budget constraints, restructuring plans, promotion policies, and compensation limits. This could impact the completeness of our long-term solution. The historical failure pattern of inaction also presents an execution risk.",
+        "message_type": "finding",
+        "references": [
+          "Attrition Risk",
+          "Growth Concern",
+          "Recognition Concern",
+          "High Workload",
+          "Specific details on budget constraints impacting promotions",
+          "Specific details on organizational restructuring plans and timeline",
+          "Specific internal promotion policies and criteria",
+          "Details on available compensation limits for retention",
+          "Historical failure pattern"
+        ]
+      },
+      {
+        "agent": "Simulation Specialist",
+        "confidence": 0.87,
+        "message": "Our top-ranked scenario is 'Create structured retention plan' (scn-c17c6a589df3) with an 84.6% success probability. It offers high retention impact at a low cost and directly addresses the identified drivers. 'Assign mentor and internal mobility path' (scn-8b77336845a2) is a strong secondary option, particularly for growth. We rejected 'Open compensation review' (scn-06f081702ace) as compensation is not the primary driver and there's a workload risk.",
+        "message_type": "finding",
+        "references": [
+          "Create structured retention plan",
+          "Assign mentor and internal mobility path",
+          "Open compensation review",
+          "scn-c17c6a589df3",
+          "scn-8b77336845a2",
+          "scn-06f081702ace"
+        ]
+      },
+      {
+        "agent": "Knowledge Specialist",
+        "confidence": 0.8,
+        "message": "The structured plan allows us to initiate immediate actions on workload and manager support, while simultaneously gathering the missing details on promotion policies and budget constraints to inform the growth path component of the plan.",
+        "message_type": "support",
+        "references": [
+          "Create structured retention plan",
+          "kp-hr-retention-playbook",
+          "kp-hr-workload-policy"
+        ]
+      },
+      {
+        "agent": "Risk Specialist",
+        "confidence": 0.85,
+        "message": "I concur. While we proceed with the structured plan, it is critical to prioritize obtaining the missing details on promotion criteria and budget. This will strengthen the plan's long-term effectiveness and address the identified confidence risks.",
+        "message_type": "challenge",
+        "references": [
+          "Create structured retention plan",
+          "missing_information"
+        ]
+      },
+      {
+        "agent": "Memory Specialist",
+        "confidence": 0.7,
+        "message": "The success of the 'Structured retention plan' in past cases often involved a proactive and detailed approach to career pathing and recognition, which reinforces the need to gather this missing information quickly.",
+        "message_type": "support",
+        "references": [
+          "mp-hr-engineer-retention-stayed",
+          "Growth Concern",
+          "Recognition Concern"
+        ]
+      },
+      {
+        "agent": "Simulation Specialist",
+        "confidence": 0.8,
+        "message": "Our 'what-if' analysis for the 'Create structured retention plan' confirms that if the initial proposal faces stakeholder rejection, we have a clear fallback to 'Assign mentor and internal mobility path'.",
+        "message_type": "clarification",
+        "references": [
+          "Create structured retention plan",
+          "Assign mentor and internal mobility path",
+          "scn-c17c6a589df3"
+        ]
+      }
+    ],
+    "supporting_points": [
+      "Greeshma is a high-performing senior engineer with critical attrition risk.",
+      "Multiple factors contribute to the risk: delayed promotion (Growth Concern), lack of recognition, high workload, and manager support gap.",
+      "The 'Create structured retention plan' addresses these multiple drivers comprehensively.",
+      "Historical data shows 'Structured retention plan' leads to retention, while inaction leads to resignation.",
+      "Policies support proactive intervention for workload, growth, and manager support issues.",
+      "The preferred strategy has a high success probability and high retention impact at a low cost.",
+      "Missing information on budget, restructuring, and promotion policies needs to be gathered to fully optimize the long-term plan."
+    ]
+  },
   "678a69a6d6c75fa69a2081d48276c9b623ed9368040fcddd32d9ee6786a67786": {
     "consensus": {
       "confidence": 0.9,
@@ -878,6 +1116,113 @@
       "Hospital Administrator"
     ],
     "summary": "Surgical Ward A is experiencing high occupancy at 91%, with only 4 beds available. There are 12 patients in the discharge queue, facing delays due to transport coordination and documentation blockers, with a transport delay issue open for 1 day. Staffing coverage is tight with a gap of 3, and increasing emergency admissions are adding pressure, indicating a critical capacity risk with an SLA deadline today at 18:00.",
+    "urgency": "Critical"
+  },
+  "f4e05451d0a4b134953060e39a2d2d8eb634cf149dc6e8c2106a5aa449c2b903": {
+    "business_signals": [
+      {
+        "category": "Risk Signal",
+        "evidence": "considering resigning",
+        "label": "Attrition Risk",
+        "severity": "Critical"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "responding to recruiter outreach on LinkedIn",
+        "label": "Attrition Risk",
+        "severity": "Critical"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "replacing her would take over four months",
+        "label": "Attrition Risk",
+        "severity": "Critical"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "passed over for promotion",
+        "label": "Growth Concern",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "promotion delay",
+        "label": "Growth Concern",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "Growth path unclear",
+        "label": "Growth Concern",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "consistently exceeding performance expectations",
+        "label": "Recognition Concern",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "led two critical product releases, mentored junior engineers, and received strong peer feedback",
+        "label": "Recognition Concern",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "manager has cited budget constraints and organizational restructuring as reasons for delaying promotions",
+        "label": "Manager Support Gap",
+        "severity": "Medium"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "manager_checkins: Irregular",
+        "label": "Manager Support Gap",
+        "severity": "Medium"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "workload_level: High",
+        "label": "High Workload",
+        "severity": "High"
+      },
+      {
+        "category": "Risk Signal",
+        "evidence": "recent engagement surveys indicate declining morale",
+        "label": "Declining Morale",
+        "severity": "High"
+      }
+    ],
+    "confidence": 0.9,
+    "decision_type": "Retention Risk",
+    "entities": [
+      "Greeshma",
+      "HR",
+      "senior software engineer",
+      "Engineering"
+    ],
+    "extracted_metrics": {
+      "engagement_score": "56",
+      "issue_age_days": "14",
+      "tenure_months": "4.2",
+      "time_to_replace_months": "4"
+    },
+    "primary_problem": "A high-performing senior engineer is considering resignation due to a delayed promotion and declining morale, posing a significant attrition risk.",
+    "required_context": [
+      "Specific details on budget constraints impacting promotions",
+      "Specific details on organizational restructuring plans and timeline",
+      "Specific internal promotion policies and criteria",
+      "Details on available compensation limits for retention"
+    ],
+    "sentiment": "Negative",
+    "stakeholders": [
+      "HR Manager",
+      "Direct Manager",
+      "HR Business Partner",
+      "Compensation Team",
+      "Functional Leader"
+    ],
+    "summary": "A senior software engineer, Greeshma, with 4.2 months tenure and a high workload, is considering resigning after being passed over for promotion despite consistently exceeding performance expectations and leading critical product releases. Her manager cited budget constraints and organizational restructuring for the delay. Recent engagement surveys show declining morale, and Greeshma has started responding to recruiter outreach. Replacing her would take over four months due to specialized domain knowledge, creating a critical retention risk for HR.",
     "urgency": "Critical"
   }
 }

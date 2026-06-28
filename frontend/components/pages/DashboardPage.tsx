@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, CheckCircle2, Clock3, FilePlus2, FileText, LineChart, TrendingUp, Users } from "lucide-react";
-import { DecisionComposer } from "@/components/workspace/DecisionComposer";
+import { Bell, CheckCircle2, Clock3, FilePlus2, FileText, LineChart, MousePointerClick, TrendingUp } from "lucide-react";
 import { DecisionRecordCard } from "@/components/workspace/DecisionViews";
 import { PageHeader } from "@/components/workspace/PageHeader";
 import { usePrism } from "@/components/workspace/PrismProvider";
@@ -13,7 +12,6 @@ export function DashboardPage() {
   const { decisions, analytics, activeDecision } = usePrism();
   const pending = decisions.filter((decision) => !decision.outcome).length;
   const approved = decisions.filter((decision) => decision.card?.approval_status === "approve" || decision.lifecycle_stage === "Approved").length;
-  const recent = decisions.slice(0, 4);
 
   return (
     <>
@@ -39,25 +37,24 @@ export function DashboardPage() {
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_420px]">
         <section className="space-y-5">
-          <div className="surface rounded-lg p-5">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-black text-slate-950">Recent Decisions</h2>
-                <p className="mt-1 text-sm text-slate-600">Latest business decisions moving through Prism.</p>
-              </div>
-              <Link href="/decisions" className="text-sm font-black text-teal-700 hover:text-teal-900">
-                View all
-              </Link>
-            </div>
-            <div className="grid gap-3 lg:grid-cols-2">
-              {recent.length ? recent.map((decision) => <DecisionRecordCard key={decision.id} decision={decision} />) : <EmptyDashboardNote />}
-            </div>
-          </div>
-
-          <DecisionComposer compact />
+          <GuidedPath />
         </section>
 
         <aside className="space-y-5">
+          <section className="surface rounded-lg p-5">
+            <div className="mb-4 flex items-center gap-2">
+              <MousePointerClick className="h-5 w-5 text-teal-700" />
+              <h2 className="text-lg font-black text-slate-950">Continue Work</h2>
+            </div>
+            {activeDecision ? (
+              <DecisionRecordCard decision={activeDecision} />
+            ) : (
+              <div className="rounded-lg border border-dashed border-slate-300 p-5 text-sm leading-6 text-slate-500">
+                No decision yet. Go to Decisions, create one, then open its card to review the recommendation.
+              </div>
+            )}
+          </section>
+
           <section className="surface rounded-lg p-5">
             <div className="mb-4 flex items-center gap-2">
               <Bell className="h-5 w-5 text-teal-700" />
@@ -69,30 +66,41 @@ export function DashboardPage() {
               <Notification title="Analytics refreshed" text="Executive metrics update automatically when decisions change." tone="slate" />
             </div>
           </section>
-
-          <section className="surface rounded-lg p-5">
-            <div className="mb-4 flex items-center gap-2">
-              <Users className="h-5 w-5 text-teal-700" />
-              <h2 className="text-lg font-black text-slate-950">Active Work</h2>
-            </div>
-            <div className="space-y-3">
-              {decisions.slice(0, 5).map((decision) => (
-                <Link key={decision.id} href={`/decisions/${decision.id}`} className="block rounded-lg border border-slate-200 bg-white p-3 hover:bg-slate-50">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="text-sm font-black text-slate-950">{decision.title}</div>
-                      <div className="mt-1 text-xs font-bold text-slate-500">{decision.customer_name}</div>
-                    </div>
-                    <StatusBadge tone="slate">{decision.lifecycle_stage}</StatusBadge>
-                  </div>
-                </Link>
-              ))}
-              {!decisions.length && <div className="text-sm text-slate-500">No active decisions yet.</div>}
-            </div>
-          </section>
         </aside>
       </div>
     </>
+  );
+}
+
+function GuidedPath() {
+  const steps = [
+    ["1", "Create a Decision", "Go to Decisions, choose a persona, and describe the business problem."],
+    ["2", "Open the Decision Card", "Click the card that appears after the council finishes."],
+    ["3", "Review the Recommendation", "Approve, reject, request changes, or ask for more info."],
+    ["4", "Record Outcome", "After approval, save what happened so Prism learns."],
+  ];
+
+  return (
+    <section className="surface rounded-lg p-5">
+      <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h2 className="text-lg font-black text-slate-950">How to use Prism</h2>
+          <p className="mt-1 text-sm leading-6 text-slate-600">Follow this path during the demo. Each step has one clear action.</p>
+        </div>
+        <Link href="/decisions" className="focus-ring inline-flex min-h-10 items-center justify-center rounded-lg bg-slate-950 px-3 text-sm font-black text-white hover:bg-slate-800">
+          Create or view decisions
+        </Link>
+      </div>
+      <div className="grid gap-3 md:grid-cols-4">
+        {steps.map(([number, title, text]) => (
+          <div key={number} className="rounded-lg border border-slate-200 bg-white p-4">
+            <div className="mb-3 grid h-8 w-8 place-items-center rounded-lg bg-teal-50 text-sm font-black text-teal-800">{number}</div>
+            <div className="text-sm font-black text-slate-950">{title}</div>
+            <p className="mt-1 text-xs leading-5 text-slate-500">{text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -103,14 +111,6 @@ function Notification({ title, text, tone }: { title: string; text: string; tone
         <StatusBadge tone={tone}>{title}</StatusBadge>
       </div>
       <p className="text-sm leading-6 text-slate-600">{text}</p>
-    </div>
-  );
-}
-
-function EmptyDashboardNote() {
-  return (
-    <div className="rounded-lg border border-dashed border-slate-300 p-6 text-sm leading-6 text-slate-500 lg:col-span-2">
-      No decisions yet. Use Quick Actions below to create your first Prism decision.
     </div>
   );
 }

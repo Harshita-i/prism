@@ -19,6 +19,8 @@ type PrismContextValue = {
   loading: boolean;
   statusMessage: string;
   error: string | null;
+  notice: WorkspaceNotice | null;
+  clearNotice: () => void;
   setActiveDecisionId: (decisionId: string | null) => void;
   refresh: () => Promise<void>;
   createAndRun: (payload: CreateDecisionRequest) => Promise<void>;
@@ -27,6 +29,14 @@ type PrismContextValue = {
 };
 
 const PrismContext = createContext<PrismContextValue | null>(null);
+
+export type WorkspaceNotice = {
+  title: string;
+  message: string;
+  tone: "success" | "info" | "warning" | "error";
+  actionHref?: string;
+  actionLabel?: string;
+};
 
 const emptyAnalytics: Analytics = {
   decision_success_rate: 0,
@@ -51,6 +61,7 @@ export function PrismProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("Workspace ready");
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<WorkspaceNotice | null>(null);
 
   const activeDecision = useMemo(
     () => decisions.find((decision) => decision.id === activeDecisionId) || decisions[0] || null,
@@ -80,7 +91,7 @@ export function PrismProvider({ children }: { children: React.ReactNode }) {
       const saved = typeof window !== "undefined" ? window.localStorage.getItem("prism.activeDecisionId") : null;
       const selected = saved && nextDecisions.some((item) => item.id === saved) ? saved : nextDecisions[0]?.id || null;
       setActiveDecisionIdState(selected);
-      setStatusMessage(nextDecisions.length ? "Decision workspace synced" : "No decisions yet");
+      setStatusMessage(nextDecisions.length ? "Latest data loaded" : "No decisions yet");
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : "Backend is not reachable";
       setError(message);
@@ -102,11 +113,23 @@ export function PrismProvider({ children }: { children: React.ReactNode }) {
       setDecisions((current) => replaceDecision(current, completed));
       setActiveDecisionId(completed.id);
       setStatusMessage("Decision ready for review");
+      setNotice({
+        title: "Decision created",
+        message: "The council finished. Open the Decision page to review the recommendation.",
+        tone: "success",
+        actionHref: `/decisions/${completed.id}`,
+        actionLabel: "Open decision",
+      });
       await refreshAnalyticsOnly();
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : "Unable to run decision";
       setError(message);
       setStatusMessage("Action failed");
+      setNotice({
+        title: "Could not run decision",
+        message,
+        tone: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -120,12 +143,55 @@ export function PrismProvider({ children }: { children: React.ReactNode }) {
       setStatusMessage(`Recording ${action}`);
       const updated = await reviewDecision(activeDecision.id, action, notes);
       setDecisions((current) => replaceDecision(current, updated));
-      setStatusMessage(`Review recorded: ${action}`);
+      const notices: Record<string, WorkspaceNotice> = {
+        approve: {
+          title: "Decision approved",
+          message: "Approval was saved, version history was updated, and this can now move to outcome tracking.",
+          tone: "success",
+          actionHref: "/outcomes",
+          actionLabel: "Go to outcomes",
+        },
+        reject: {
+          title: "Decision rejected",
+          message: "The rejection was saved in the approval log. Prism keeps the audit trail for review.",
+          tone: "warning",
+          actionHref: `/decisions/${activeDecision.id}`,
+          actionLabel: "View audit trail",
+        },
+        request_changes: {
+          title: "Changes requested",
+          message: "The decision stays in human review. The request was saved as a new version.",
+          tone: "info",
+          actionHref: `/decisions/${activeDecision.id}`,
+          actionLabel: "View decision",
+        },
+        request_more_information: {
+          title: "More information requested",
+          message: "The request was saved. Review evidence before approving this decision.",
+          tone: "info",
+          actionHref: "/evidence",
+          actionLabel: "Review evidence",
+        },
+        modify: {
+          title: "Modification requested",
+          message: "The modification request was saved to the approval log and version history.",
+          tone: "info",
+          actionHref: `/decisions/${activeDecision.id}`,
+          actionLabel: "View decision",
+        },
+      };
+      setStatusMessage(`Review saved: ${action.replace(/_/g, " ")}`);
+      setNotice(notices[action] || notices.modify);
       await refreshAnalyticsOnly();
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : "Review failed";
       setError(message);
       setStatusMessage("Review failed");
+      setNotice({
+        title: "Review failed",
+        message,
+        tone: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -140,11 +206,23 @@ export function PrismProvider({ children }: { children: React.ReactNode }) {
       const updated = await recordOutcome(activeDecision.id, outcome, notes);
       setDecisions((current) => replaceDecision(current, updated));
       setStatusMessage("Outcome recorded");
+      setNotice({
+        title: "Outcome recorded",
+        message: "Prism saved the result and added this decision to organizational memory.",
+        tone: "success",
+        actionHref: "/outcomes",
+        actionLabel: "View outcomes",
+      });
       await refreshAnalyticsOnly();
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : "Outcome failed";
       setError(message);
       setStatusMessage("Outcome failed");
+      setNotice({
+        title: "Outcome failed",
+        message,
+        tone: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -168,13 +246,15 @@ export function PrismProvider({ children }: { children: React.ReactNode }) {
       loading,
       statusMessage,
       error,
+      notice,
+      clearNotice: () => setNotice(null),
       setActiveDecisionId,
       refresh,
       createAndRun,
       reviewActive,
       recordActiveOutcome,
     }),
-    [decisions, activeDecision, activeDecisionId, analytics, loading, statusMessage, error],
+    [decisions, activeDecision, activeDecisionId, analytics, loading, statusMessage, error, notice],
   );
 
   return <PrismContext.Provider value={value}>{children}</PrismContext.Provider>;
