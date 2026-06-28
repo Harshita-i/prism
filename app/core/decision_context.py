@@ -99,8 +99,6 @@ class MemoryFinding(BaseModel):
     summary: str
     relevance: float = 0.0
     lesson: str = ""
-
-
 class MemoryPacket(BaseModel):
     id: str
     title: str
