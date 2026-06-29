@@ -118,8 +118,6 @@ After a decision is executed, Prism records the outcome. Successful, failed, and
 
 ## Demo Links
 
-Add final video links here before submission.
-
 | Resource | Link |
 | --- | --- |
 | Architecture Documentation | [`docs/architecture.md`](docs/architecture.md) |
