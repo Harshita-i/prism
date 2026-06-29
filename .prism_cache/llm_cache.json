@@ -244,6 +244,99 @@
     "summary": "Nova Retail Group is evaluating Prism for its Southeast Asia expansion, with business stakeholders eager to proceed. However, the CFO has raised concerns about implementation costs and ROI, requesting a detailed value realization plan. A competitor, Nimbus Analytics, has offered a lower-cost solution. Additionally, a security questionnaire is pending, and the deal has been stalled for 12 days, requiring the Sales Manager to strategize for executive approval while protecting deal value.",
     "urgency": "High"
   },
+  "5cc320158e3f7f0d8d9f9e5ded394956b614a486f80a22dcd6f72cd0bc619e8a": {
+    "consensus": {
+      "confidence": 0.9,
+      "disagreements": [],
+      "level": "Strong",
+      "open_questions": [],
+      "preferred_strategy": "Schedule security-led technical validation workshop",
+      "rationale": [
+        "The primary blocker for the Atlas Bank deal is security and compliance, requiring technical validation.",
+        "Our Security Validation Process and Enterprise Sales Playbook explicitly recommend structured technical validation for such objections.",
+        "Historical data shows a high success rate (0.973 memory confidence) for this strategy in similar stalled deals.",
+        "The 'Schedule security-led technical validation workshop' scenario has the highest success probability (0.874) and low associated risks.",
+        "Offering pricing incentives is explicitly cautioned against by policy when security and trust blockers are not yet resolved, and it carries high financial risk."
+      ],
+      "status": "Reached"
+    },
+    "discussion": [
+      {
+        "agent": "Planner",
+        "confidence": 0.9,
+        "message": "The Atlas Bank enterprise deal is stalled at the Security Review stage due to significant security and compliance concerns, with a competitor also in evaluation. We need a clear path forward to address these technical blockers.",
+        "message_type": "finding",
+        "references": [
+          "Atlas Bank",
+          "Stalled Deal",
+          "Security Concern",
+          "Compliance Concern",
+          "Competitive Threat"
+        ]
+      },
+      {
+        "agent": "Knowledge Specialist",
+        "confidence": 0.8,
+        "message": "Our Security Validation Process (kp-sales-security-validation) explicitly states that security and compliance objections require structured validation with technical experts. The Enterprise Sales Playbook (kp-sales-enterprise-playbook) also advises involving technical experts for product risk in stalled enterprise deals. Importantly, the Sales Discount Approval Policy (kp-sales-discount-policy) cautions against pricing incentives until security and trust blockers are understood.",
+        "message_type": "support",
+        "references": [
+          "kp-sales-security-validation",
+          "kp-sales-enterprise-playbook",
+          "kp-sales-discount-policy",
+          "Security Concern",
+          "Compliance Concern",
+          "Technical Validation Required"
+        ]
+      },
+      {
+        "agent": "Memory Specialist",
+        "confidence": 0.973,
+        "message": "Historical data strongly supports scheduling a security-led technical validation workshop for similar stalled deals. Multiple past cases (mp-d529535f-29b1-453c-a04c-e9b528804036, mp-b1d1a8a6-bd96-4778-be88-a9c5509edb16, mp-sales-atlas-security-closed) show this strategy successfully moved deals to procurement or resulted in a win, with high confidence.",
+        "message_type": "support",
+        "references": [
+          "mp-d529535f-29b1-453c-a04c-e9b528804036",
+          "mp-b1d1a8a6-bd96-4778-be88-a9c5509edb16",
+          "mp-sales-atlas-security-closed",
+          "winning_patterns"
+        ]
+      },
+      {
+        "agent": "Risk Specialist",
+        "confidence": 0.9,
+        "message": "The primary risks are high security and compliance concerns, the stalled deal status, and the competitive threat. Technical validation is clearly required. Offering pricing incentives at this stage is a high financial risk and is explicitly advised against by policy given the security concerns, potentially leading to commercial impact.",
+        "message_type": "finding",
+        "references": [
+          "Security Concern",
+          "Compliance Concern",
+          "Stalled Deal",
+          "Competitive Threat",
+          "Technical Validation Required",
+          "Commercial impact possible",
+          "Offer limited pricing incentive"
+        ]
+      },
+      {
+        "agent": "Simulation Specialist",
+        "confidence": 0.876,
+        "message": "The 'Schedule security-led technical validation workshop' scenario (scn-0ecf344f7eab) is the top-ranked strategy. It has a high success probability (0.874), low business and operational risk, and a quick time to impact (7 Days). It directly addresses the technical and trust blockers identified.",
+        "message_type": "support",
+        "references": [
+          "scn-0ecf344f7eab",
+          "Schedule security-led technical validation workshop",
+          "High win probability improvement",
+          "Low business risk",
+          "7 Days"
+        ]
+      }
+    ],
+    "supporting_points": [
+      "Security and compliance objections require structured validation with solutions engineering, security leads, and the account executive (Security Validation Process).",
+      "Pricing incentives should be used only after business value, security, and authority blockers are understood (Sales Discount Approval Policy).",
+      "Historical success with 'Schedule security-led technical validation workshop' in similar stalled deals (memory confidence 0.973).",
+      "The winning scenario 'Schedule security-led technical validation workshop' has a success probability of 0.874 and low business risk.",
+      "The deal is stalled due to security and compliance concerns, requiring technical validation."
+    ]
+  },
   "628153641770bb3dbae5813e647ad90e48daff5d5e001318b09a2c1f602073c6": {
     "consensus": {
       "confidence": 0.876,
@@ -572,6 +665,102 @@
       "Historical failure pattern: Early pricing discount.",
       "Simulation projects 90% probability for 'Schedule security-led technical validation workshop'.",
       "Simulation projects 44% probability for 'Offer limited pricing incentive', with high risk and 'avoid_when' conditions met."
+    ]
+  },
+  "70a924bf08de1ce667e61de5979807a7d8403dc8a65ef562a56d678a2fd57af3": {
+    "consensus": {
+      "confidence": 0.876,
+      "disagreements": [],
+      "level": "Strong",
+      "open_questions": [],
+      "preferred_strategy": "Schedule security-led technical validation workshop",
+      "rationale": [
+        "The council strongly recommends scheduling a security-led technical validation workshop. This strategy directly addresses the high-severity security and compliance concerns, is strongly supported by internal processes and historical success patterns, and carries low associated risks. Offering pricing incentives is inappropriate given the current technical blockers and has been linked to past failures. Executive escalation is not the primary need at this stage, as the core issue is technical validation."
+      ],
+      "status": "Reached"
+    },
+    "discussion": [
+      {
+        "agent": "Planner",
+        "confidence": 0.9,
+        "message": "The Atlas Bank deal is stalled at $420,000 due to high-severity security and compliance concerns, with technical validation pending and a competitor in play. We need a clear path forward.",
+        "message_type": "finding",
+        "references": [
+          "Atlas Bank",
+          "Stalled Deal",
+          "Security Concern",
+          "Compliance Concern",
+          "Technical Validation Required",
+          "Competitive Threat"
+        ]
+      },
+      {
+        "agent": "Knowledge Specialist",
+        "confidence": 0.542,
+        "message": "Our Security Validation Process (kp-sales-security-validation) explicitly requires structured validation for security and compliance objections, aligning with the proposed technical workshop. The Enterprise Sales Playbook (kp-sales-enterprise-playbook) also supports involving technical experts for product risk in stalled deals. Conversely, the Sales Discount Approval Policy (kp-sales-discount-policy) advises against pricing incentives until security and trust blockers are understood, which is a key reason to avoid 'Offer limited pricing incentive'.",
+        "message_type": "support",
+        "references": [
+          "kp-sales-security-validation",
+          "kp-sales-enterprise-playbook",
+          "kp-sales-discount-policy",
+          "Security Concern",
+          "Compliance Concern"
+        ]
+      },
+      {
+        "agent": "Memory Specialist",
+        "confidence": 0.973,
+        "message": "Historical data strongly supports 'Schedule security-led technical validation workshop'. We have 3 similar cases (mp-d529535f-29b1-453c-a04c-e9b528804036, mp-sales-atlas-security-closed, mp-case-68a84d93-0195-427f-b94a-ba70842b0e4a) where this strategy led to the deal moving to procurement, with a high confidence of 0.973. Conversely, 'Early pricing discount' (mp-sales-northstar-discount-lost) has been a failure pattern in a similar stalled deal with trust concerns, resulting in a 'Lost' outcome.",
+        "message_type": "support",
+        "references": [
+          "mp-d529535f-29b1-453c-a04c-e9b528804036",
+          "mp-sales-atlas-security-closed",
+          "mp-case-68a84d93-0195-427f-b94a-ba70842b0e4a",
+          "mp-sales-northstar-discount-lost",
+          "winning_patterns",
+          "failure_patterns"
+        ]
+      },
+      {
+        "agent": "Risk Specialist",
+        "confidence": 0.6,
+        "message": "The overall deal risk is Medium, driven by high-severity Security and Compliance Concerns, a Stalled Deal status, and a pending Security Questionnaire. The 'Schedule security-led technical validation workshop' strategy presents a Low business and operational risk. In contrast, 'Offer limited pricing incentive' carries High business and operational risks and is inappropriate given the current blockers, as highlighted by a historical failure pattern.",
+        "message_type": "finding",
+        "references": [
+          "Security Concern",
+          "Compliance Concern",
+          "Stalled Deal",
+          "Security Questionnaire Pending",
+          "overall_level",
+          "Schedule security-led technical validation workshop",
+          "Offer limited pricing incentive",
+          "Historical failure pattern"
+        ]
+      },
+      {
+        "agent": "Simulation Specialist",
+        "confidence": 0.876,
+        "message": "Our top-ranked scenario is 'Schedule security-led technical validation workshop' with a high success probability of 0.874 and low risk. This directly addresses the core technical and trust issues. 'Offer limited pricing incentive' was rejected due to the existing 'Security Concern' and 'Trust Gap'. 'Escalate executive sponsor alignment' was rejected because the deal value ($420,000) does not meet the 'Low Deal Value' avoidance condition, and the primary blocker is technical validation, not executive alignment.",
+        "message_type": "consensus",
+        "references": [
+          "Schedule security-led technical validation workshop",
+          "success_probability",
+          "Offer limited pricing incentive",
+          "Security Concern",
+          "Trust Gap",
+          "Escalate executive sponsor alignment",
+          "Low Deal Value"
+        ]
+      }
+    ],
+    "supporting_points": [
+      "Security team raised compliance and data residency concerns.",
+      "Procurement is waiting for technical validation.",
+      "Security Validation Process recommends technical workshop for compliance blockers.",
+      "Historical winning pattern: Schedule security-led technical validation workshop (3 instances).",
+      "Pricing incentives should be used only after business value, security, and authority blockers are understood.",
+      "Historical failure pattern: Early pricing discount (1 instance).",
+      "Deal value of $420,000 does not trigger 'Low Deal Value' avoidance for executive escalation."
     ]
   },
   "75cbf87060c68c43999bb72ce37ae7d2a168ed29b4ffd6f4d7fa1499fee3dc52": {

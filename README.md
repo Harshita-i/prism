@@ -12,48 +12,25 @@
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Gemini](https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)
 
-Prism is a decision intelligence platform for teams that need to make important business decisions with evidence, accountability, and learning.
+## Team
 
-- Multi-agent decision intelligence
-- Organizational memory
-- Explainable recommendations
-- Human-in-the-loop governance
-- Outcome-based learning
+**Team Name:** DotTrio
 
-## Demo
-
-Add final submission links here:
-
-| Resource | Link |
+| Team Member | Roll Number |
 | --- | --- |
-| Product Demo | `<add product demo video link>` |
-| Architecture Walkthrough | `<add architecture walkthrough video link>` |
-| Documentation | [`docs/architecture.md`](docs/architecture.md) |
-| Setup Guide | [`docs/setup-guide.md`](docs/setup-guide.md) |
+| Immadi Harshita | 23071A0583 |
+| K Greeshma Reddy | 23071A0585 |
+| Mohd Sania Tabassum | 23071A05A1 |
+
+**GitHub Repository:** [Harshita-i/prism.git](https://github.com/Harshita-i/prism.git)
 
 ## Overview
 
+Prism is a decision intelligence platform for teams that need to make important business decisions with evidence, accountability, and learning.
+
 Most AI tools generate answers. Prism builds enterprise decisions.
 
-Instead of leaving business reasoning inside a temporary chat window, Prism creates a persistent Decision Card with structured context, evidence, agent reasoning, council consensus, human review, lifecycle history, and outcome tracking.
-
-The same decision engine can support Sales, HR, Healthcare, Operations, Customer Success, and other enterprise workflows.
-
-## Enterprise Decision Challenge
-
-Important decisions require more than a generated answer.
-
-Enterprise teams need:
-
-- Clear business context
-- Supporting evidence
-- Risk analysis
-- Alternatives
-- Human approval
-- Outcome tracking
-- Reusable organizational learning
-
-Without these, decisions become difficult to audit, explain, govern, or improve.
+Instead of leaving business reasoning inside a temporary chat window, Prism creates a persistent Decision Card with structured context, supporting evidence, agent reasoning, council consensus, human review, lifecycle history, and outcome tracking.
 
 ## Why Prism?
 
@@ -67,7 +44,7 @@ Without these, decisions become difficult to audit, explain, govern, or improve.
 | Limited explainability | Evidence-backed recommendations |
 | Conversation-first | Decision-lifecycle-first |
 
-## How Prism Works
+## Core Idea
 
 Prism converts a business issue into a managed Decision.
 
@@ -84,20 +61,18 @@ Each Decision includes:
 - Lifecycle history
 - Outcome record
 
-This makes every decision traceable from the original business problem to the final result.
-
 ## Highlights
 
-- Multi-agent AI architecture
+- Multi-agent decision intelligence
 - Planner-led orchestration
 - Shared Decision Context
 - Executive Council collaboration
-- Evidence-backed reasoning
+- Evidence-backed recommendations
 - Scenario Intelligence Agent
-- Human-in-the-loop decision making
+- Human-in-the-loop governance
 - Organizational memory
+- Outcome-based learning
 - Reusable across multiple business domains
-- Enterprise-ready decision lifecycle
 
 ## Key Features
 
@@ -114,38 +89,22 @@ This makes every decision traceable from the original business problem to the fi
 - Decision lifecycle tracking
 - Decision analytics
 
-## Quick Start
+## Demo Links
 
-```powershell
-git clone https://github.com/Harshita-i/prism.git
-cd prism
+Add final video links here before submission.
 
-python -m venv .venv
-.\.venv\Scripts\activate
-pip install -r requirements.txt
+| Resource | Link |
+| --- | --- |
+| Architecture Documentation | [`docs/architecture.md`](docs/architecture.md) |
+| Setup Guide | [`docs/setup-guide.md`](docs/setup-guide.md) |
+| Demo Guide | [`docs/demo-guide.md`](docs/demo-guide.md) |
 
-uvicorn app.main:app --reload --port 8000
-```
 
-Open a second terminal:
-
-```powershell
-cd frontend
-npm install --legacy-peer-deps
-npm run dev
-```
-
-Open the application:
-
-```text
-http://localhost:3000/dashboard
-```
-
-## Architecture flow
+## High-Level Architecture
 
 ```mermaid
 flowchart TD
-    A["Business Issue"] --> B["Prism Frontend"]
+    A["Business Issue"] --> B["Next.js Frontend"]
     B --> C["FastAPI Backend"]
     C --> D["Planner"]
     D --> E["Shared Decision Context"]
@@ -163,57 +122,7 @@ flowchart TD
     M --> N["Organizational Memory"]
 ```
 
-## Core Components
-
-### Planner
-
-Coordinates the decision workflow. The Planner facilitates the process but does not directly make the final decision.
-
-### Shared Decision Context
-
-Stores the current state of the decision. Agents read from and write to this shared context so the system has one source of truth.
-
-### Knowledge Agent
-
-Retrieves relevant policies, playbooks, and business guidance. It converts knowledge into structured evidence packets.
-
-### Memory Agent
-
-Finds similar historical decisions and outcomes. It helps Prism learn from previous business experience.
-
-### Risk Agent
-
-Identifies business, operational, financial, and confidence risks.
-
-### Scenario Intelligence Agent
-
-Compares possible strategies and estimates expected impact, risk, cost, confidence, and time to impact.
-
-### Executive Council
-
-Combines specialist findings into a collaborative discussion. The council challenges assumptions, references evidence, and reaches consensus.
-
-### Decision Core
-
-Builds the final Decision Card from structured context, evidence, memory, risk, scenarios, and council consensus.
-
-### Human Review
-
-Allows a human to approve, reject, request changes, or ask for more information before a decision is executed.
-
-## Decision Lifecycle
-
-```text
-Draft
-  -> Evidence Collection
-  -> Executive Council
-  -> Scenario Analysis
-  -> Recommendation
-  -> Human Review
-  -> Approved / Rejected / Changes Requested
-  -> Outcome Recorded
-  -> Memory Updated
-```
+Detailed architecture and design decisions are documented in [`docs/architecture.md`](docs/architecture.md).
 
 ## Technology Stack
 
@@ -247,25 +156,16 @@ Draft
 - Local semantic retrieval architecture
 - ChromaDB and sentence-transformers support
 
-## Installation
+## Quick Start
 
-For a beginner-friendly setup walkthrough, see [`docs/setup-guide.md`](docs/setup-guide.md).
-
-### Prerequisites
-
-- Python 3.11 or newer
-- Node.js 20 or newer
-- npm
-- Git
-
-### Clone Repository
+### 1. Clone Repository
 
 ```powershell
 git clone https://github.com/Harshita-i/prism.git
 cd prism
 ```
 
-### Backend Setup
+### 2. Backend Setup
 
 ```powershell
 python -m venv .venv
@@ -273,37 +173,20 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### Frontend Setup
-
-```powershell
-cd frontend
-npm install --legacy-peer-deps
-```
-
-### Backend Environment
+### 3. Backend Environment
 
 Create `.env` in the project root:
 
 ```env
 PRISM_LLM_ENABLED=false
 PRISM_LLM_PROVIDER=gemini
-PRISM_LLM_MODEL=gemini-2.5-flash
+PRISM_LLM_MODEL=gemini-1.5-flash
 GEMINI_API_KEY=
 PRISM_LOG_LEVEL=INFO
 PRISM_KNOWLEDGE_EMBEDDINGS=auto
 ```
 
-### Frontend Environment
-
-Create `frontend/.env.local`:
-
-```env
-NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
-```
-
-### Run Backend
-
-From the project root:
+### 4. Run Backend
 
 ```powershell
 uvicorn app.main:app --reload --port 8000
@@ -321,12 +204,24 @@ API documentation:
 http://127.0.0.1:8000/docs
 ```
 
-### Run Frontend
+### 5. Frontend Setup
 
 Open a second terminal:
 
 ```powershell
 cd frontend
+npm install --legacy-peer-deps
+```
+
+Create `frontend/.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+```
+
+### 6. Run Frontend
+
+```powershell
 npm run dev
 ```
 
@@ -386,8 +281,6 @@ prism/
 
 ## Demo Personas
 
-Prism supports multiple enterprise personas using the same decision architecture.
-
 | Persona | Use Case |
 | --- | --- |
 | Sales Manager | Move strategic opportunities forward with the right next action. |
@@ -434,25 +327,17 @@ A care unit is experiencing patient flow delays. Prism evaluates operational opt
 | `GET` | `/analytics` | Get analytics |
 | `GET` | `/decision-search` | Search decisions |
 
-## Known Limitations
-
-- The current version uses seeded demo knowledge and memory.
-- Real enterprise data connectors are not included yet.
-- Authentication and role-based access are not included yet.
-- LLM usage is optional and depends on API configuration.
-- Prism supports decision intelligence and review, not automatic business execution.
-
 ## Future Scope
 
 - Enterprise authentication
 - Role-based access control
-- SharePoint, Slack, Notion, Google Drive, and CRM connectors
+- Enterprise document connectors
 - Uploaded document ingestion
-- Advanced analytics
 - Approval routing
 - Audit exports
 - Additional specialist agents
 - Cloud deployment
+- Advanced analytics
 
 ## Conclusion
 
