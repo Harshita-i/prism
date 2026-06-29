@@ -35,6 +35,10 @@ The frontend gives users a workspace for creating decisions, reviewing council d
 
 The backend owns the decision intelligence workflow. It receives business input, creates a Decision Context, runs specialist agents, generates an Executive Council discussion, assembles a Decision Card, and stores the result.
 
+<p align="center">
+  <img src="docs/assets/architecture.png" alt=" System Architecture" width="700"/>
+</p>
+
 ## Architecture flow
 
 ```mermaid
@@ -58,7 +62,6 @@ flowchart TD
     N --> O["Outcome Tracking"]
     O --> P["Organizational Memory"]
 ```
-
 ## Agent Responsibilities
 
 ### Planner
