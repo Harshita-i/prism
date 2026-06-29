@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Prism is an Enterprise Decision Intelligence Platform built for the Agentic AI Hackathon.
+Prism is an Enterprise Decision Intelligence Platform for governed, evidence-backed business decisions.
 
 The platform helps enterprise teams convert complex business situations into structured, explainable, human-reviewed decisions. Prism is designed around the idea that businesses do not need temporary AI chat responses; they need decisions that are traceable, evidence-backed, reviewable, outcome-aware, and reusable.
 
@@ -186,7 +186,7 @@ User input
 
 ### Why FastAPI?
 
-FastAPI was chosen because it is lightweight, fast, and ideal for building Python APIs quickly. It provides automatic Swagger documentation, strong Pydantic integration, and a simple development workflow for hackathon delivery.
+FastAPI was chosen because it is lightweight, fast, and well suited for Python-based decision services. It provides automatic Swagger documentation, strong Pydantic integration, and a simple development workflow for API-driven systems.
 
 ### Why React and Next.js?
 
@@ -196,7 +196,7 @@ React and Next.js were chosen because they make it easy to build a polished work
 
 Gemini-compatible LLM support was used for optional context extraction and council reasoning. Prism is designed so the LLM supports reasoning, but does not directly own the final enterprise decision.
 
-The system can also run in fallback mode without an API key, which makes the prototype easier to demo.
+The system can also run in fallback mode without an API key, which keeps the core workflow available when an external LLM provider is not configured.
 
 ### Why Planner?
 
@@ -230,7 +230,7 @@ The same engine supports multiple personas by changing business context, labels,
 
 ## Security Considerations
 
-The hackathon prototype does not include full production security. For production use, Prism would need:
+The current implementation does not include full production security. For production use, Prism would need:
 
 - Authentication
 - Role-based access control
@@ -242,7 +242,7 @@ The hackathon prototype does not include full production security. For productio
 - Approval routing
 - Data retention policies
 
-The MVP is designed to demonstrate decision intelligence architecture, not production security hardening.
+The current implementation focuses on decision intelligence architecture. Production deployment would require additional security hardening.
 
 ## Scalability
 
@@ -261,11 +261,11 @@ The key scalability advantage is modularity. New agents and data sources can be 
 
 ## Limitations
 
-- Seeded demo data is used for knowledge and memory in the MVP.
+- Seeded knowledge and memory data are used in the current implementation.
 - Real enterprise integrations are not fully implemented.
 - Authentication and multi-user accounts are not included.
 - LLM output quality depends on provider availability and API configuration.
-- Some reasoning can fall back to deterministic demo logic when LLM is disabled.
+- Some reasoning can fall back to deterministic local logic when LLM is disabled.
 - The platform supports decision support, not automatic business execution.
 
 ## Future Enhancements
@@ -284,7 +284,7 @@ The key scalability advantage is modularity. New agents and data sources can be 
 
 ## Conclusion
 
-Prism demonstrates how agentic AI can become enterprise decision infrastructure.
+Prism shows how agentic AI can become enterprise decision infrastructure.
 
 The platform does not merely generate answers. It creates governed decisions with evidence, council reasoning, human review, outcome tracking, and organizational memory.
 
