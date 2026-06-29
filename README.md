@@ -116,45 +116,14 @@ Prism does not automatically execute recommendations. A human can approve, rejec
 
 After a decision is executed, Prism records the outcome. Successful, failed, and partially successful decisions become reusable organizational memory for future recommendations.
 
-## Screenshots
-
-Add final screenshots inside:
-
-```text
-docs/assets/
-```
-
-Suggested screenshots:
-
-```text
-docs/assets/dashboard.png
-docs/assets/decisions.png
-docs/assets/executive-council.png
-docs/assets/evidence.png
-docs/assets/analysis.png
-docs/assets/recommendation.png
-docs/assets/outcomes.png
-```
-
-Suggested Markdown placeholders:
-
-```md
-![Prism Dashboard](docs/assets/dashboard.png)
-![Executive Council](docs/assets/executive-council.png)
-![Decision Recommendation](docs/assets/recommendation.png)
-```
-
 ## Demo Links
 
 Add final video links here before submission.
 
 | Resource | Link |
 | --- | --- |
-| Product Demo Video | `<add product demo video link>` |
-| Architecture Walkthrough Video | `<add architecture walkthrough video link>` |
 | Architecture Documentation | [`docs/architecture.md`](docs/architecture.md) |
 | Setup Guide | [`docs/setup-guide.md`](docs/setup-guide.md) |
-| Demo Guide | [`docs/demo-guide.md`](docs/demo-guide.md) |
 
 ## High-Level Architecture
 
@@ -440,14 +409,6 @@ A care unit is experiencing patient flow delays. Prism evaluates operational opt
 | `GET` | `/decisions/{decision_id}/lifecycle` | Get lifecycle history |
 | `GET` | `/analytics` | Get analytics |
 | `GET` | `/decision-search` | Search decisions |
-
-## Additional Notes
-
-- Prism can run without an LLM API key using local fallback reasoning.
-- Gemini-compatible LLM support can be enabled through environment variables.
-- Current knowledge and memory are seeded for local execution.
-- Real enterprise connectors such as SharePoint, Slack, Notion, Google Drive, and CRM can be added as future data sources.
-- Prism supports decision intelligence and human review, not automatic business execution.
 
 ## Future Scope
 
