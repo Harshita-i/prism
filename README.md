@@ -114,34 +114,6 @@ This makes every decision traceable from the original business problem to the fi
 - Decision lifecycle tracking
 - Decision analytics
 
-## Screenshots
-
-Add screenshots in:
-
-```text
-docs/assets/
-```
-
-Suggested screenshots:
-
-```text
-docs/assets/dashboard.png
-docs/assets/decisions.png
-docs/assets/executive-council.png
-docs/assets/evidence.png
-docs/assets/analysis.png
-docs/assets/recommendation.png
-docs/assets/outcomes.png
-```
-
-Recommended README image placeholders:
-
-```md
-![Prism Dashboard](docs/assets/dashboard.png)
-![Executive Council](docs/assets/executive-council.png)
-![Decision Recommendation](docs/assets/recommendation.png)
-```
-
 ## Quick Start
 
 ```powershell
