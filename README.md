@@ -140,6 +140,9 @@ Open the application:
 ```text
 http://localhost:3000/dashboard
 ```
+<p align="center">
+  <img src="docs/assets/architecture.png" alt=" System Architecture" width="700"/>
+</p>
 
 ## Architecture flow
 
