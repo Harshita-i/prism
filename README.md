@@ -117,7 +117,7 @@ This makes every decision traceable from the original business problem to the fi
 ## Quick Start
 
 ```powershell
-git clone <repository-url>
+git clone https://github.com/Harshita-i/prism.git
 cd prism
 
 python -m venv .venv
@@ -141,7 +141,7 @@ Open the application:
 http://localhost:3000/dashboard
 ```
 
-## Architecture
+## Architecture flow
 
 ```mermaid
 flowchart TD
@@ -261,7 +261,7 @@ For a beginner-friendly setup walkthrough, see [`docs/setup-guide.md`](docs/setu
 ### Clone Repository
 
 ```powershell
-git clone <repository-url>
+git clone https://github.com/Harshita-i/prism.git
 cd prism
 ```
 
@@ -287,7 +287,7 @@ Create `.env` in the project root:
 ```env
 PRISM_LLM_ENABLED=false
 PRISM_LLM_PROVIDER=gemini
-PRISM_LLM_MODEL=gemini-1.5-flash
+PRISM_LLM_MODEL=gemini-2.5-flash
 GEMINI_API_KEY=
 PRISM_LOG_LEVEL=INFO
 PRISM_KNOWLEDGE_EMBEDDINGS=auto

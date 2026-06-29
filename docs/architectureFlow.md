@@ -259,15 +259,6 @@ Prism can scale in several directions:
 
 The key scalability advantage is modularity. New agents and data sources can be added without rewriting the core decision lifecycle.
 
-## Limitations
-
-- Seeded knowledge and memory data are used in the current implementation.
-- Real enterprise integrations are not fully implemented.
-- Authentication and multi-user accounts are not included.
-- LLM output quality depends on provider availability and API configuration.
-- Some reasoning can fall back to deterministic local logic when LLM is disabled.
-- The platform supports decision support, not automatic business execution.
-
 ## Future Enhancements
 
 - SharePoint, Slack, Notion, Google Drive, and CRM connectors

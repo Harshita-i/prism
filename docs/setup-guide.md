@@ -50,7 +50,7 @@ frontend/
 ## 3. Clone Repository
 
 ```powershell
-git clone <your-github-repository-url>
+git clone https://github.com/Harshita-i/prism.git
 cd prism
 ```
 
@@ -328,15 +328,3 @@ GEMINI_API_KEY=your_api_key_here
 12. Approve the decision.
 13. Record outcome.
 14. Show learning/outcomes.
-
-## 12. Final Submission Check
-
-Before submitting:
-
-- Push source code to GitHub.
-- Include `README.md`.
-- Include `docs/setup-guide.md`.
-- Include `docs/architecture.md`.
-- Add demo video link.
-- Add architecture walkthrough video link.
-- Check that setup commands work from a fresh clone.
