@@ -2,7 +2,7 @@
 
 ### Enterprise Decision Intelligence Platform
 
-> Transforming business problems into traceable, explainable, and human-reviewed enterprise decisions.
+> Prism transforms complex business problems into traceable, explainable, and human-reviewed enterprise decisions.
 
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
@@ -26,11 +26,26 @@
 
 ## Overview
 
-Prism is a decision intelligence platform for teams that need to make important business decisions with evidence, accountability, and learning.
+Prism is built for enterprise teams that need to make important decisions with clarity, evidence, and accountability.
 
-Most AI tools generate answers. Prism builds enterprise decisions.
+Most AI applications are designed around conversations. A user asks a question, the AI generates a response, and the reasoning often disappears inside a chat history. That works for simple assistance, but it is not enough for business-critical decisions such as saving a customer renewal, handling employee attrition risk, resolving a stalled enterprise deal, or responding to operational disruption.
 
-Instead of leaving business reasoning inside a temporary chat window, Prism creates a persistent Decision Card with structured context, supporting evidence, agent reasoning, council consensus, human review, lifecycle history, and outcome tracking.
+Prism treats every important business problem as a **Decision**. A Decision is a persistent object that contains business context, supporting evidence, agent reasoning, risk analysis, scenario comparison, human review, lifecycle history, and final outcome. This makes Prism closer to an enterprise decision system than a normal chatbot.
+
+## Enterprise Decision Challenge
+
+Enterprise decisions are rarely made from one piece of information. They usually require policies, past experience, risk evaluation, alternatives, approvals, and follow-up learning.
+
+Traditional AI tools can generate useful responses, but they usually do not provide:
+
+- A structured decision lifecycle
+- Evidence references
+- Human approval workflow
+- Historical outcome memory
+- Clear accountability
+- Reusable organizational learning
+
+Because of this, teams may get an answer but still lack the governance needed to trust, review, and reuse that decision later.
 
 ## Why Prism?
 
@@ -44,50 +59,90 @@ Instead of leaving business reasoning inside a temporary chat window, Prism crea
 | Limited explainability | Evidence-backed recommendations |
 | Conversation-first | Decision-lifecycle-first |
 
-## Core Idea
+Prism is designed to answer not only **"What should we do?"**, but also **"Why should we do it, what evidence supports it, who approved it, and what happened afterward?"**
+
+## What Prism Does
 
 Prism converts a business issue into a managed Decision.
 
-Each Decision includes:
+For example, a user can enter:
 
-- Structured business context
-- Knowledge evidence
-- Historical memory
-- Risk assessment
-- Scenario analysis
-- Executive Council discussion
-- Final recommendation
-- Human review status
-- Lifecycle history
-- Outcome record
+```text
+Atlas Bank enterprise deal is stalled because the customer has security and compliance objections.
+```
 
-## Highlights
+Prism then:
 
-- Multi-agent decision intelligence
-- Planner-led orchestration
-- Shared Decision Context
-- Executive Council collaboration
-- Evidence-backed recommendations
-- Scenario Intelligence Agent
-- Human-in-the-loop governance
-- Organizational memory
-- Outcome-based learning
-- Reusable across multiple business domains
+1. Extracts the business context.
+2. Retrieves relevant knowledge and policies.
+3. Finds similar historical decisions.
+4. Evaluates risk.
+5. Compares possible strategies.
+6. Runs an Executive Council discussion.
+7. Generates a Decision Card.
+8. Sends the recommendation for human review.
+9. Records the final outcome.
+10. Stores the result as organizational memory.
 
-## Key Features
+This creates a complete decision trail from problem to recommendation to outcome.
 
-- Workspace-based enterprise dashboard
-- Multi-persona decision creation
-- Knowledge retrieval and evidence packets
-- Memory retrieval from historical decisions
-- Risk analysis
-- Scenario comparison
-- Executive Council discussion
-- Recommendation generation
-- Human approval workflow
-- Outcome recording
-- Decision lifecycle tracking
-- Decision analytics
+## Key Capabilities
+
+### Multi-Persona Decision Support
+
+Prism supports multiple business personas using the same underlying decision engine. Sales, HR, Healthcare, Operations, and Customer Success teams can all use Prism without changing the platform architecture. Only the business context, evidence, labels, and scenario options change.
+
+### Planner-Led Orchestration
+
+The Planner coordinates the decision workflow. It does not directly decide the final recommendation. Instead, it facilitates the process by preparing the shared decision context, coordinating agents, and sending the final council consensus to the Decision Core.
+
+### Shared Decision Context
+
+Every decision has a shared context object. This context stores the structured business problem, persona, evidence, memory, risk, scenario analysis, council discussion, recommendation, review status, and outcome.
+
+This prevents agents from working in isolation and creates one source of truth for the decision.
+
+### Executive Council
+
+The Executive Council is where specialist agents contribute their findings. Knowledge brings policy evidence, Memory brings historical outcomes, Risk highlights exposure, and Scenario Intelligence compares possible future strategies.
+
+The council makes Prism's reasoning visible instead of hiding it inside one AI response.
+
+### Human-in-the-Loop Review
+
+Prism does not automatically execute recommendations. A human can approve, reject, request changes, or ask for more information. This keeps accountability with the business user while still allowing AI to assist with reasoning.
+
+### Outcome-Based Learning
+
+After a decision is executed, Prism records the outcome. Successful, failed, and partially successful decisions become reusable organizational memory for future recommendations.
+
+## Screenshots
+
+Add final screenshots inside:
+
+```text
+docs/assets/
+```
+
+Suggested screenshots:
+
+```text
+docs/assets/dashboard.png
+docs/assets/decisions.png
+docs/assets/executive-council.png
+docs/assets/evidence.png
+docs/assets/analysis.png
+docs/assets/recommendation.png
+docs/assets/outcomes.png
+```
+
+Suggested Markdown placeholders:
+
+```md
+![Prism Dashboard](docs/assets/dashboard.png)
+![Executive Council](docs/assets/executive-council.png)
+![Decision Recommendation](docs/assets/recommendation.png)
+```
 
 ## Demo Links
 
@@ -95,10 +150,11 @@ Add final video links here before submission.
 
 | Resource | Link |
 | --- | --- |
+| Product Demo Video | `<add product demo video link>` |
+| Architecture Walkthrough Video | `<add architecture walkthrough video link>` |
 | Architecture Documentation | [`docs/architecture.md`](docs/architecture.md) |
 | Setup Guide | [`docs/setup-guide.md`](docs/setup-guide.md) |
 | Demo Guide | [`docs/demo-guide.md`](docs/demo-guide.md) |
-
 
 ## High-Level Architecture
 
@@ -122,7 +178,65 @@ flowchart TD
     M --> N["Organizational Memory"]
 ```
 
-Detailed architecture and design decisions are documented in [`docs/architecture.md`](docs/architecture.md).
+Detailed architecture and key design decisions are documented in [`docs/architecture.md`](docs/architecture.md).
+
+## Core Components
+
+### Frontend
+
+The frontend is a workspace-style interface built with Next.js, React, TypeScript, and Tailwind CSS. It provides separate areas for dashboard overview, decisions, Executive Council, evidence, analysis, outcomes, and analytics.
+
+### Backend
+
+The backend is built with FastAPI. It exposes APIs for creating decisions, running the council, retrieving decision details, submitting human review actions, recording outcomes, and fetching analytics.
+
+### Planner
+
+The Planner is the orchestration layer. It coordinates the decision workflow and ensures that the right agents contribute to the decision process.
+
+### Knowledge Agent
+
+The Knowledge Agent retrieves relevant business policies, playbooks, and guidance. It converts enterprise knowledge into evidence packets that can be referenced by the final recommendation.
+
+### Memory Agent
+
+The Memory Agent retrieves similar historical decisions and outcomes. It helps Prism understand what worked or failed in previous cases.
+
+### Risk Agent
+
+The Risk Agent evaluates business, operational, financial, and confidence risks. It helps the platform avoid recommendations that appear unsupported or unsafe.
+
+### Scenario Intelligence Agent
+
+The Scenario Intelligence Agent compares multiple possible actions. It estimates likely success, risk, cost, complexity, confidence, and time to impact.
+
+### Executive Council
+
+The Executive Council combines the findings from specialist agents. It creates a visible reasoning trail before the final recommendation is generated.
+
+### Decision Core
+
+The Decision Core builds the final Decision Card from structured evidence, memory, risk, scenario analysis, and council consensus. It does not directly depend on a raw prompt as the final decision source.
+
+### Human Review
+
+Human Review allows the business user to approve, reject, request changes, or request more information before a recommendation is accepted.
+
+## Decision Lifecycle
+
+```text
+Draft
+  -> Evidence Collection
+  -> Executive Council
+  -> Scenario Analysis
+  -> Recommendation
+  -> Human Review
+  -> Approved / Rejected / Changes Requested
+  -> Outcome Recorded
+  -> Memory Updated
+```
+
+Each stage gives the decision a clear audit trail.
 
 ## Technology Stack
 
@@ -293,23 +407,23 @@ prism/
 
 ### Sales
 
-An enterprise banking deal is stalled because the customer has security and compliance concerns. Prism recommends a security-led technical validation workshop.
+An enterprise banking deal is stalled because the customer has security and compliance concerns. Prism recommends a security-led technical validation workshop before commercial negotiation.
 
 ### HR
 
-A senior engineer has declining engagement due to workload and career-growth concerns. Prism recommends a structured retention plan.
+A senior engineer has declining engagement due to workload and career-growth concerns. Prism recommends a structured retention plan that addresses workload, growth path, and manager support.
 
 ### Customer Success
 
-A SaaS renewal is at risk after pricing objections and competitor evaluation. Prism recommends an executive value workshop.
+A SaaS renewal is at risk after pricing objections and competitor evaluation. Prism recommends an executive value workshop to prove business value before changing commercial terms.
 
 ### Operations
 
-A supplier delay threatens a customer delivery commitment. Prism compares mitigation strategies and recommends the best next action.
+A supplier delay threatens a customer delivery commitment. Prism compares mitigation strategies and recommends the best next action based on urgency, risk, and business impact.
 
 ### Healthcare
 
-A care unit is experiencing patient flow delays. Prism evaluates operational options and recommends a capacity improvement action.
+A care unit is experiencing patient flow delays. Prism evaluates operational options and recommends a capacity improvement action without replacing clinical judgment.
 
 ## API Overview
 
@@ -326,6 +440,14 @@ A care unit is experiencing patient flow delays. Prism evaluates operational opt
 | `GET` | `/decisions/{decision_id}/lifecycle` | Get lifecycle history |
 | `GET` | `/analytics` | Get analytics |
 | `GET` | `/decision-search` | Search decisions |
+
+## Additional Notes
+
+- Prism can run without an LLM API key using local fallback reasoning.
+- Gemini-compatible LLM support can be enabled through environment variables.
+- Current knowledge and memory are seeded for local execution.
+- Real enterprise connectors such as SharePoint, Slack, Notion, Google Drive, and CRM can be added as future data sources.
+- Prism supports decision intelligence and human review, not automatic business execution.
 
 ## Future Scope
 
